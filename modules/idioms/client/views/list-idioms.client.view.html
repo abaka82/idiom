@@ -1,0 +1,21 @@
+<section>
+  <div class="page-header">
+    <h1>Idioms</h1>
+  </div>
+  <div class="list-group">
+    <a ng-repeat="idiom in vm.idioms" ui-sref="idioms.view({ idiomId: idiom.id })" class="list-group-item">
+      <small class="list-group-item-text">
+        Posted on
+        <span ng-bind="idiom.createdAt | date:'mediumDate'"></span>
+        by
+        <span ng-if="idiom.User" ng-bind="idiom.User.displayName"></span>
+        <span ng-if="!idiom.User">Deleted User</span>
+      </small>
+      <h4 class="list-group-item-heading" ng-bind="idiom.idiom"></h4>
+      <p class="list-group-item-text" ng-bind="idiom.derivation"></p>
+    </a>
+  </div>
+  <div class="alert alert-warning text-center" ng-if="vm.idioms.$resolved && !vm.idioms.length">
+    No idioms yet, why don't you <a ui-sref="idioms.create">create one</a>?
+  </div>
+</section>

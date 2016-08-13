@@ -1,0 +1,23 @@
+<section>
+  <div class="page-header">
+    <h1 ng-bind="vm.idiom.idiom"></h1>
+  </div>
+  <div class="pull-right" ng-show="vm.authentication.user.id == vm.idiom.userId">
+    <a class="btn btn-primary" ui-sref="idioms.edit({ idiomId: vm.idiom.id })">
+      <i class="glyphicon glyphicon-edit"></i>
+    </a>
+    <a class="btn btn-primary" ng-click="vm.remove()">
+      <i class="glyphicon glyphicon-trash"></i>
+    </a>
+  </div>
+  <small>
+    <em class="text-muted">
+      Posted on
+      <span ng-bind="vm.idiom.createdAt | date:'mediumDate'"></span>
+      by
+      <span ng-if="vm.idiom.User" ng-bind="vm.idiom.User.displayName"></span>
+      <span ng-if="!vm.idiom.User">Deleted User</span>
+    </em>
+  </small>
+  <p class="lead" ng-bind="vm.idiom.derivation"></p>
+</section>

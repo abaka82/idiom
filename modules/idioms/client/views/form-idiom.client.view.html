@@ -1,0 +1,28 @@
+<section>
+  <div class="page-header">
+    <h1>{{vm.idiom.id ? 'Edit Idiom' : 'New Idiom'}}</h1>
+  </div>
+  <div class="col-md-12">
+    <form name="vm.form.idiomForm" class="form-horizontal" ng-submit="vm.save(vm.form.idiomForm.$valid)" novalidate>
+      <fieldset>
+        <div class="form-group" show-errors>
+          <label class="control-label" for="idiom">Idiom</label>
+          <input name="idiom" type="text" ng-model="vm.idiom.idiom" id="idiom" class="form-control" placeholder="Enter Idiom ..." required>
+          <div ng-messages="vm.form.idiomForm.idiom.$error" role="alert">
+            <p class="help-block error-text" ng-message="required">Idiom Idiom is required.</p>
+          </div>
+        </div>
+        <div class="form-group">
+          <label class="control-label" for="derivation">Derivation</label>
+          <textarea name="content" data-ng-model="vm.idiom.derivation" id="derivation" class="form-control" cols="30" rows="10" placeholder="Enter derivation here ..."></textarea>
+        </div>
+        <div class="form-group">
+          <button type="submit" class="btn btn-default">{{vm.idiom.id ? 'Update' : 'Create'}}</button>
+        </div>
+        <div ng-show="vm.error" class="text-danger">
+          <strong ng-bind="vm.error"></strong>
+        </div>
+      </fieldset>
+    </form>
+  </div>
+</section>
