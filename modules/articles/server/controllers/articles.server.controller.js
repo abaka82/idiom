@@ -15,8 +15,8 @@ exports.create = function(req, res) {
 
   // save and return and instance of article on the res object. 
   db.Article.create({
-    title: req.body.title,
-    content: req.body.content,
+    title: req.body.idiom,
+    content: req.body.derivation,
     userId: req.user.id
   })
   .then(function(newArticle) {
@@ -132,8 +132,8 @@ exports.update = function(req, res) {
     })
     .then(function(article) {
       article.updateAttributes({
-        title: req.body.title,
-        content: req.body.content
+        idiom: req.body.idiom,
+        derivation: req.body.derivation
       })
       .then(function() {
         return res.json(article);

@@ -11,8 +11,8 @@
         <span ng-if="article.User" ng-bind="article.User.displayName"></span>
         <span ng-if="!article.User">Deleted User</span>
       </small>
-      <h4 class="list-group-item-heading" ng-bind="article.title"></h4>
-      <p class="list-group-item-text" ng-bind="article.content"></p>
+      <h4 class="list-group-item-heading" ng-bind="article.idiom"></h4>
+      <p class="list-group-item-text" ng-bind="article.derivation"></p>
     </a>
   </div>
   <div class="alert alert-warning text-center" ng-if="vm.articles.$resolved && !vm.articles.length">

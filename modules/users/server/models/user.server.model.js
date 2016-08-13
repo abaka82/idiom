@@ -76,7 +76,7 @@ module.exports = function(sequelize, DataTypes) {
         notEmpty: true
       }
     },
-    /*displayName: DataTypes.STRING,
+    displayName: DataTypes.STRING,
     email: {
       allowNull: false,
       type: DataTypes.STRING,
@@ -104,19 +104,19 @@ module.exports = function(sequelize, DataTypes) {
     },
     provider: {
       type: DataTypes.STRING
-    },
+    },/*
     providerData: {
       type: DataTypes.JSONB
     },
     additionalProvidersData: {
       type: DataTypes.JSONB
-    },
+    },*/
     resetPasswordToken: {
       type: DataTypes.STRING
     },
     resetPasswordExpires: {
       type: DataTypes.DATE
-    }*/
+    }
   }, {
     classMethods: {
       /**
