@@ -51,13 +51,41 @@
           <strong ng-bind="error"></strong>
         </div>
 
-
-
         <div class="form-group">
           <button type="submit" class="btn btn-success btn-lg">{{vm.idiom.id ? 'Update' : 'Create'}}</button>
         </div>
         <div ng-show="vm.error" class="text-danger">
           <strong ng-bind="vm.error"></strong>
+        </div>
+
+
+        <div class="row" ng-show="vm.idiom.id">
+          <div class="col-sm-8">
+            <div class="form-group" show-errors>
+              <label class="control-label" for="translation">Add 121 translations</label>
+              <input name="translation" type="text" ng-model="vm.translation.translation" id="translation" class="form-control" placeholder="Enter 121 translation ...">
+              <!--<div ng-messages="vm.form.idiomForm.translation.$error" role="alert">
+                <p class="help-block error-text" ng-message="required">Idiom is required.</p>
+              </div>-->
+            </div>
+          </div>
+
+          <div class="col-sm-1">
+            <div class="form-group">
+              <label class="control-label" for="translationLanguage">Language</label>
+              <select name="translationLanguage" id="translationLanguage" ng-options="option.lang for option in vm.languages track by option.id" ng-model="vm.selectedTranslationLang" class="form-control">
+              </select>
+            </div>
+          </div>
+
+          <div class="col-sm-1 col-sm-offset-1">
+            <div class="form-group">
+              <button class="btn btn-success btn-lg" ng-click="vm.saveTranslation(vm.form.idiomForm.$valid)">Add</button>
+            </div>
+          </div>
+          <div ng-show="vm.error.translation" class="text-danger">
+            <strong ng-bind="vm.error.translation"></strong>
+          </div>
         </div>
       </fieldset>
     </form>

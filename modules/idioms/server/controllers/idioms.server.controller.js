@@ -17,6 +17,7 @@ exports.create = function(req, res) {
   db.Idiom.create({
     idiom: req.body.idiom,
     derivation: req.body.derivation,
+    language: req.body.language,
     userId: req.user.id
   })
   .then(function(newIdiom) {
@@ -179,7 +180,8 @@ exports.update = function(req, res) {
     .then(function(idiom) {
       idiom.updateAttributes({
         idiom: req.body.idiom,
-        derivation: req.body.derivation
+        derivation: req.body.derivation,
+        language: req.body.language
       })
       .then(function() {
         return res.json(idiom);

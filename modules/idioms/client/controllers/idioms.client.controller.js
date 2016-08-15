@@ -5,17 +5,19 @@
     .module('idioms')
     .controller('IdiomsController', IdiomsController);
 
-  IdiomsController.$inject = ['$http', '$scope', '$timeout', '$window', '$state', 'idiomResolve', 'Authentication', 'FileUploader'];
+  IdiomsController.$inject = ['$http', '$scope', '$timeout', '$window', '$state', 'idiomResolve', 'translationResolve','Authentication', 'FileUploader'];
 
-  function IdiomsController($http, $scope, $timeout, $window, $state, idiom, Authentication, FileUploader) {
+  function IdiomsController($http, $scope, $timeout, $window, $state, idiom, translation, Authentication, FileUploader) {
     var vm = this;
 
     vm.idiom = idiom;
+    vm.translation = translation;
     vm.authentication = Authentication;
     vm.error = null;
     vm.form = {};
     vm.remove = remove;
     vm.save = save;
+    vm.saveTranslation = saveTranslation;
 
     vm.languages = [
       { id: '1', lang: 'DE' },
@@ -23,6 +25,7 @@
       { id: '3', lang: 'ES' },
       { id: '4', lang: 'IT' }];
     vm.selectedLang = { id: '1', lang: 'DE' }; //This sets the default value of the select in the ui
+    vm.selectedTranslationLang = { id: '2', lang: 'EN' };
 
     // Remove existing Idiom
     function remove() {
@@ -116,6 +119,8 @@
         return false;
       }
 
+      vm.idiom.language = vm.selectedLang.lang;
+
       // TODO: move create/update logic to service
       if (vm.idiom.id) {
         vm.idiom.$update(successCallback, errorCallback);
@@ -124,16 +129,39 @@
       }
 
       function successCallback(res) {
-        /*$state.go('idioms.view', {
-          idiomId: res.id
-        });*/
-        console.log('successsssss');
+        console.log('success add idiom with id: '+res.id);
       }
 
       function errorCallback(res) {
         vm.error = res.data.message;
       }
-
     }
+
+    // Save 121 Translations
+    function saveTranslation(isValid) {
+
+      if (!isValid) {
+        $scope.$broadcast('show-errors-check-validity', 'vm.form.idiomForm');
+        return false;
+      }
+
+      vm.translation.language = vm.selectedTranslationLang.lang;
+      vm.translation.idiomId = vm.idiom.id;
+
+      vm.translation.$save(successCallback, errorCallback);
+
+      function successCallback(res) {
+        console.log('success add translation with id: '+res.id);
+
+        //clear id and prepare for new translation
+        vm.translation.id = '';
+      }
+
+      function errorCallback(res) {
+        vm.error = res.data.message;
+      }
+    }
+
+
   }
 })();

@@ -14,8 +14,8 @@ exports.create = function(req, res) {
   // save and return and instance of translation on the res object. 
   db.Translation.create({
     translation: req.body.translation,
-    derivation: req.body.derivation,
-    idiomId: '2',
+    language: req.body.language,
+    idiomId: req.body.idiomId,
     userId: req.user.id
   })
   .then(function(newTranslation) {
@@ -132,7 +132,8 @@ exports.update = function(req, res) {
     .then(function(translation) {
       translation.updateAttributes({
         translation: req.body.translation,
-        derivation: req.body.derivation
+        language: req.body.language,
+        idiomId: req.body.idiomId
       })
       .then(function() {
         return res.json(translation);

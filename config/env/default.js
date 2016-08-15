@@ -40,7 +40,7 @@ module.exports = {
     idiomUpload: {
       dest: './modules/idioms/client/img/uploads/', // Idiom upload destination path
       limits: {
-        fileSize: 1*1024*1024 // Max file size in bytes (1 MB)
+        fileSize: 2*1024*1024 // Max file size in bytes (2 MB)
       }
     }
   }
