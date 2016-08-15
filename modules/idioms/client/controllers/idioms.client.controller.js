@@ -18,11 +18,11 @@
     vm.save = save;
 
     vm.languages = [
-      {id: '1', lang: 'DE'},
-      {id: '2', lang: 'EN'},
-      {id: '3', lang: 'ES'},
-      {id: '4', lang: 'IT'}];
-    vm.selectedLang = {id: '1', lang: 'DE'}; //This sets the default value of the select in the ui
+      { id: '1', lang: 'DE' },
+      { id: '2', lang: 'EN' },
+      { id: '3', lang: 'ES' },
+      { id: '4', lang: 'IT' }];
+    vm.selectedLang = { id: '1', lang: 'DE' }; //This sets the default value of the select in the ui
 
     // Remove existing Idiom
     function remove() {
@@ -32,11 +32,11 @@
     }
 
     // --------Start Image functions ------------
-    if  (!vm.idiom.imageURL) {
+    if (!vm.idiom.imageURL) {
       vm.imageURL = 'modules/idioms/client/img/no-image.png';
     } else {
       vm.imageURL = vm.idiom.imageURL;
-    };
+    }
 
     // Create file uploader instance
     vm.uploader = new FileUploader({

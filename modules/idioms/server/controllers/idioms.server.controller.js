@@ -54,17 +54,17 @@ exports.changePicture = function(req, res) {
           }
         })
         .then(function(idiom) {
-           idiom.imageURL = config.uploads.idiomUpload.dest + req.file.filename;
-           idiom
-             .save()
-             .then(function(idiom) {
-               return res.json(idiom);
-             })
-             .catch(function(err) {
-               return res.status(400).send({
-                 message: errorHandler.getErrorMessage(err)
-               });
-             });
+          idiom.imageURL = config.uploads.idiomUpload.dest + req.file.filename;
+          idiom
+            .save()
+            .then(function(idiom) {
+              return res.json(idiom);
+            })
+            .catch(function(err) {
+              return res.status(400).send({
+                message: errorHandler.getErrorMessage(err)
+              });
+            });
         })
         .catch(function(err) {
           return res.status(400).send({
