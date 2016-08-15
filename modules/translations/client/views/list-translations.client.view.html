@@ -1,0 +1,21 @@
+<section>
+  <div class="page-header">
+    <h1>Translations</h1>
+  </div>
+  <div class="list-group">
+    <a ng-repeat="translation in vm.translations" ui-sref="translations.view({ translationId: translation.id })" class="list-group-item">
+      <small class="list-group-item-text">
+        Posted on
+        <span ng-bind="translation.createdAt | date:'mediumDate'"></span>
+        by
+        <span ng-if="translation.User" ng-bind="translation.User.displayName"></span>
+        <span ng-if="!translation.User">Deleted User</span>
+      </small>
+      <h4 class="list-group-item-heading" ng-bind="translation.translation"></h4>
+      <p class="list-group-item-text" ng-bind="translation.derivation"></p>
+    </a>
+  </div>
+  <div class="alert alert-warning text-center" ng-if="vm.translations.$resolved && !vm.translations.length">
+    No translations yet, why don't you <a ui-sref="translations.create">create one</a>?
+  </div>
+</section>
