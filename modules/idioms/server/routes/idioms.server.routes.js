@@ -17,4 +17,6 @@ module.exports = function(app) {
     .get(idioms.read)
     .put(idioms.update)
     .delete(idioms.delete);
+
+  app.route('/api/idioms/picture').post(idioms.changePicture);
 };

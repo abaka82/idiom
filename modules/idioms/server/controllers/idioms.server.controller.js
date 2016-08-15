@@ -5,7 +5,9 @@
  */
 var path = require('path'),
   db = require(path.resolve('./config/lib/sequelize')),
-  errorHandler = require(path.resolve('./modules/core/server/controllers/errors.server.controller'));
+  errorHandler = require(path.resolve('./modules/core/server/controllers/errors.server.controller')),
+  multer = require('multer'),
+  config = require(path.resolve('./config/config'));
 
 /**
  * Create a idiom
@@ -24,6 +26,52 @@ exports.create = function(req, res) {
     return res.status(400).send({
       message: errorHandler.getErrorMessage(err)
     });
+  });
+};
+
+/**
+ * Update idioms picture
+ */
+exports.changePicture = function(req, res) {
+  var idiom = req.idiom;
+  var upload = multer(config.uploads.idiomUpload).single('newPicture');
+  var profileUploadFileFilter = require(path.resolve('./config/lib/multer')).profileUploadFileFilter;
+
+  // Filtering to upload only images
+  upload.fileFilter = profileUploadFileFilter;
+
+  upload(req, res, function(uploadError) { 
+    if (uploadError) {
+      return res.status(400).send({
+        message: 'Error occurred while uploading idiom picture'
+      });
+    } else {
+      var id = req.body.idiomId;
+      db.Idiom
+        .findOne({
+          where: {
+            id: id
+          }
+        })
+        .then(function(idiom) {
+           idiom.imageURL = config.uploads.idiomUpload.dest + req.file.filename;
+           idiom
+             .save()
+             .then(function(idiom) {
+               return res.json(idiom);
+             })
+             .catch(function(err) {
+               return res.status(400).send({
+                 message: errorHandler.getErrorMessage(err)
+               });
+             });
+        })
+        .catch(function(err) {
+          return res.status(400).send({
+            message: errorHandler.getErrorMessage(err)
+          });
+        });
+    }
   });
 };
 
