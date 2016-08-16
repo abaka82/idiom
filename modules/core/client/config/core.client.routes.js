@@ -11,10 +11,15 @@ angular.module('core').config(['$stateProvider', '$urlRouterProvider',
       });
     });
 
-    // Home state routing
+    // Starting state routing
     $stateProvider
-    .state('home', {
+    .state('index', {
       url: '/',
+      templateUrl: 'modules/users/client/views/authentication/signin.client.view.html'
+    })
+    // Home state routing
+    .state('home', {
+      url: '/home',
       templateUrl: 'modules/core/client/views/home.client.view.html'
     })
     .state('not-found', {
