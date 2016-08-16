@@ -20,11 +20,6 @@ $ npm install -g bower
 $ npm install -g grunt-cli
 ```
 
-
-## Downloading PEAN.JS
-There are several ways you can get the PEAN.JS boilerplate:
-
-
 ## Quick Install
 Once you've downloaded the boilerplate and installed all the prerequisites, you're just a few steps away from starting your application.
 
@@ -41,6 +36,7 @@ $ npm install
 
 2. Then you will need to do is supply your MySQL credentials. To do this, open 'config/env/development.js' and edit as required:
 
+```
   db: {
     options: {
       logging: process.env.DB_LOGGING === 'true' ? console.log : false,
@@ -50,9 +46,13 @@ $ npm install
       password: '',                        --> change to your db password
       username: 'root'                     --> change to your db username
     },
+```
 
 3. [Optional] Change port number in 'config/env/default.js':
+
+```
   port: process.env.PORT || 3000,          --> change to your prefereable port
+```
 
 4. Now just run your application using Grunt. 
 
