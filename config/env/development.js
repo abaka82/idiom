@@ -105,7 +105,7 @@ module.exports = {
       }
     },
     //init: process.env.DB_SEED === 'true' ? true : false,
-    init: true,
+    init: false,
     logging: process.env.DB_SEED_LOGGING === 'false' ? false : true
   }
 };

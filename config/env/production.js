@@ -78,7 +78,8 @@ module.exports = {
       username: 'sql7131742'
     },
     sync: {
-      force: process.env.DB_FORCE === 'true' ? true : false
+      //force: process.env.DB_FORCE === 'true' ? true : false
+      force: false
     }
   },
   seed: {
@@ -102,7 +103,8 @@ module.exports = {
         roles: ['user', 'admin']
       }
     },
-    init: process.env.DB_SEED === 'true' ? true : false,
+    //init: process.env.DB_SEED === 'true' ? true : false,
+    init: false,
     logging: process.env.DB_SEED_LOGGING === 'false' ? false : true
   }
 };
