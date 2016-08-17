@@ -68,15 +68,16 @@ module.exports = {
   },
   livereload: true,
   roles: ['admin', 'guest', 'user'],
+  //roles: ['admin'],
   db: {
     options: {
       logging: process.env.DB_LOGGING === 'true' ? console.log : false,
       //host: process.env.DB_HOST || '127.0.0.1',
-      host: '127.0.0.1',
+      host: 'sql7.freemysqlhosting.net',
       port: process.env.DB_PORT || '3306',
-      database: 'idiom',
-      password: '',
-      username: 'root'
+      database: 'sql7131742',
+      password: '1NgFpWVCfq',
+      username: 'sql7131742'
     },
     sync: {
       force: process.env.DB_FORCE === 'true' ? true : false
