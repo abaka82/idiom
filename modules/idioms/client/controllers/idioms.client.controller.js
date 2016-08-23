@@ -4,25 +4,10 @@
   angular
     .module('idioms')
     .controller('IdiomsController', IdiomsController);
-    /*
-    .directive('ngConfirmClick', [function () {
-    return {
-        link: function link(scope, element, attr) {
-            var msg = attr.ngConfirmClick || "Are you sure to delete this product??";
-            var clickAction = attr.confirmedClick;
-            element.bind('click', function (event) {
-                if (window.confirm(msg)) {
-                    console.log('msg: '-msg);
-                    console.log('clickAction: '-clickAction);
-                    scope.$eval(clickAction);
-                }
-            });
-        }
-    };}]);*/
 
-  IdiomsController.$inject = ['$http', '$scope', '$timeout', '$window', '$state', 'idiomResolve', 'translationResolve','Authentication', 'FileUploader', 'TranslationsByIdiomService'];
+  IdiomsController.$inject = ['$http', '$scope', '$timeout', '$window', '$state', 'idiomResolve', 'translationResolve','Authentication', 'FileUploader', 'TranslationsService', 'TranslationsByIdiomService'];
 
-  function IdiomsController($http, $scope, $timeout, $window, $state, idiom, translation, Authentication, FileUploader, TranslationsByIdiomService) {
+  function IdiomsController($http, $scope, $timeout, $window, $state, idiom, translation, Authentication, FileUploader, TranslationsService, TranslationsByIdiomService) {
     var vm = this;
 
     vm.idiom = idiom;
@@ -33,6 +18,7 @@
     vm.remove = remove;
     vm.save = save;
     vm.saveTranslation = saveTranslation;
+    vm.translationRequired = false;
 
     vm.translationsByIdiom = [];
 
@@ -154,13 +140,25 @@
 
     // --------End Image functions ------------
 
+
     // --------Start 121 Translations functions ------------
+
+    // get all translation based on idiom id
+    function getTranslation() {
+      TranslationsByIdiomService.query({ idiomId : vm.idiom.id })
+      .$promise.then(function (res) {
+        vm.translationsByIdiom = res;
+      }, function(res) {
+        vm.error = res.data.message;
+      });
+    }
 
     // Save 121 Translations
     function saveTranslation(isValid) {
 
-      if (!isValid) {
-        $scope.$broadcast('show-errors-check-validity', 'vm.form.idiomForm');
+      // check 121 translation blank or not
+      if (!vm.translation.translation) {
+        vm.translationRequired = true;
         return false;
       }
 
@@ -170,18 +168,14 @@
       vm.translation.$save(successCallback, errorCallback);
 
       function successCallback(res) {
-        console.log('success add translation with id: '+res.id);
+        console.log('success add 121 translation with id: '+res.id);
 
         //clear id and prepare for new translation
         vm.translation.id = '';
+        vm.translationRequired = false;
 
-        //get all translation based on idiom id
-        TranslationsByIdiomService.query({ idiomId : vm.idiom.id })
-        .$promise.then(function (res) {
-          vm.translationsByIdiom = res;
-        }, function(res) {
-          vm.error = res.data.message;
-        });
+        // refresh translation list
+        getTranslation();
       }
 
       function errorCallback(res) {
@@ -189,20 +183,24 @@
       }
     }
 
-
     // Delete 121 Translations
     function removeTranslation(translationId) {
-      console.log('translationId: '+ translationId);
 
-      //get all translation based on idiom id
-      translation.delete({ translationId : translationId })
+      TranslationsService.delete({ translationId : translationId })
       .$promise.then(function (res) {
-        console.log('success delete');
+        console.log('success delete 121 Translations');
+
+        // refresh translation list
+        getTranslation();
       }, function(res) {
-        console.log('serror delete');
+        console.log('error delete 121 Translations');
         vm.error = res.data.message;
       });
     }
+
+    $scope.removeTranslation = function(translationId) {
+      removeTranslation(translationId);
+    };
 
     // --------End 121 Translations functions ------------
 

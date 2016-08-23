@@ -3,7 +3,7 @@
     <h1>{{vm.idiom.id ? 'Edit Idiom' : 'New Idiom'}}</h1>
   </div>
   <div class="col-md-12">
-    <form name="vm.form.idiomForm" class="form-horizontal" ng-submit="vm.save(vm.form.idiomForm.$valid)" novalidate>
+    <form name="vm.form.idiomForm" class="form-horizontal" novalidate>
       <fieldset>
         <div class="row">
           <div class="col-sm-8">
@@ -65,7 +65,7 @@
         </div>
 
         <div class="form-group">
-          <button type="submit" class="btn btn-success btn-lg">{{vm.idiom.id ? 'Update' : 'Create'}}</button>
+          <button ng-click="vm.save(vm.form.idiomForm.$valid)" class="btn btn-success btn-lg">{{vm.idiom.id ? 'Update' : 'Create'}}</button>
         </div>
         <div ng-show="vm.error" class="text-danger">
           <strong ng-bind="vm.error"></strong>
@@ -76,10 +76,10 @@
           <div class="col-sm-8">
             <div class="form-group" show-errors>
               <label class="control-label" for="translation">Add 121 translations</label>
-              <input name="translation" type="text" ng-model="vm.translation.translation" id="translation" class="form-control" placeholder="Enter 121 translation ...">
-              <!--<div ng-messages="vm.form.idiomForm.translation.$error" role="alert">
-                <p class="help-block error-text" ng-message="required">Idiom is required.</p>
-              </div>-->
+              <input name="translation" type="text" ng-model="vm.translation.translation" id="translation" class="form-control" placeholder="Enter 121 translation ..." ng-Keyup="vm.translationRequired=false;">
+              <div ng-show="vm.translationRequired" class="text-danger">
+                <strong>121 translation is required.</strong>
+              </div>
             </div>
           </div>
 
@@ -116,10 +116,9 @@
                 <td>{{entry.translation}}</td>
                 <td>{{entry.language}}</td>
                 <td>
-                <!--<button confirmed-click="dfdfbdffdb" ng-confirm-click="Do yo want to delete {{entry.translation}} - {{entry.language}} ?" > -->
-                    <button
+                   <button
                         custom-confirmation="removeTranslation(entry.id)"
-                        custom-message="Are you sure you want to remove <strong>{{entry.translation | capitalize: all}}</strong> language {{entry.language}}?"
+                        custom-message="Are you sure you want to remove <strong>{{entry.translation | capitalize: all}}</strong> language <strong>{{entry.language}}</strong>?"
                         class="btn btn-default">
                       <i class="fa fa-trash-o"></i>
                     </button>
