@@ -42,13 +42,13 @@ var checkImage = function(user) {
  * @return {[type]}      [description]
  */
 var checkPassword = function(user) {
-        owasp.config({
-          allowPassphrases       : false,
-          maxLength              : 128,
-          minLength              : 4,
-          minPhraseLength        : 4,
-          minOptionalTestsToPass : 1
-        });
+  owasp.config({
+    allowPassphrases       : false,
+    maxLength              : 128,
+    minLength              : 4,
+    minPhraseLength        : 4,
+    minOptionalTestsToPass : 1
+  });
 
   var passwordTest = owasp.test(user.password);
 

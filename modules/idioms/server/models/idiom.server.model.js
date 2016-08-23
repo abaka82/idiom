@@ -12,6 +12,7 @@ module.exports = function(sequelize, DataTypes) {
       defaultValue: ''
     },
     language: DataTypes.STRING(2),
+    meaning: DataTypes.STRING(2048),
     derivation: DataTypes.STRING(2048),
     imageURL: {
       type: DataTypes.STRING

@@ -16,6 +16,7 @@ exports.create = function(req, res) {
   // save and return and instance of idiom on the res object. 
   db.Idiom.create({
     idiom: req.body.idiom,
+    meaning: req.body.meaning,
     derivation: req.body.derivation,
     language: req.body.language,
     userId: req.user.id
@@ -180,6 +181,7 @@ exports.update = function(req, res) {
     .then(function(idiom) {
       idiom.updateAttributes({
         idiom: req.body.idiom,
+        meaning: req.body.meaning,
         derivation: req.body.derivation,
         language: req.body.language
       })

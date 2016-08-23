@@ -20,6 +20,9 @@ exports.invokeRolesPolicies = function() {
     }, {
       resources: '/api/translations/:translationId',
       permissions: '*'
+    }, {
+      resources: '/api/getTranslationsByIdiom/:idiomId',
+      permissions: '*'
     }]
   }, {
     roles: ['user'],
@@ -28,6 +31,9 @@ exports.invokeRolesPolicies = function() {
       permissions: ['get', 'post']
     }, {
       resources: '/api/translations/:translationId',
+      permissions: '*'
+    }, {
+      resources: '/api/getTranslationsByIdiom/:idiomId',
       permissions: '*'
     }]
   }, {
@@ -38,6 +44,9 @@ exports.invokeRolesPolicies = function() {
     }, {
       resources: '/api/translations/:translationId',
       permissions: ['get']
+    }, {
+      resources: '/api/getTranslationsByIdiom/:idiomId',
+      permissions: '*'
     }]
   }]);
 };

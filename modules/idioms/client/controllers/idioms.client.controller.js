@@ -4,10 +4,25 @@
   angular
     .module('idioms')
     .controller('IdiomsController', IdiomsController);
+    /*
+    .directive('ngConfirmClick', [function () {
+    return {
+        link: function link(scope, element, attr) {
+            var msg = attr.ngConfirmClick || "Are you sure to delete this product??";
+            var clickAction = attr.confirmedClick;
+            element.bind('click', function (event) {
+                if (window.confirm(msg)) {
+                    console.log('msg: '-msg);
+                    console.log('clickAction: '-clickAction);
+                    scope.$eval(clickAction);
+                }
+            });
+        }
+    };}]);*/
 
-  IdiomsController.$inject = ['$http', '$scope', '$timeout', '$window', '$state', 'idiomResolve', 'translationResolve','Authentication', 'FileUploader'];
+  IdiomsController.$inject = ['$http', '$scope', '$timeout', '$window', '$state', 'idiomResolve', 'translationResolve','Authentication', 'FileUploader', 'TranslationsByIdiomService'];
 
-  function IdiomsController($http, $scope, $timeout, $window, $state, idiom, translation, Authentication, FileUploader) {
+  function IdiomsController($http, $scope, $timeout, $window, $state, idiom, translation, Authentication, FileUploader, TranslationsByIdiomService) {
     var vm = this;
 
     vm.idiom = idiom;
@@ -18,6 +33,8 @@
     vm.remove = remove;
     vm.save = save;
     vm.saveTranslation = saveTranslation;
+
+    vm.translationsByIdiom = [];
 
     vm.languages = [
       { id: '1', lang: 'DE' },
@@ -31,6 +48,31 @@
     function remove() {
       if (confirm('Are you sure you want to delete?')) {
         vm.idiom.$remove($state.go('idioms.list'));
+      }
+    }
+
+    // Save Idiom
+    function save(isValid) {
+      if (!isValid) {
+        $scope.$broadcast('show-errors-check-validity', 'vm.form.idiomForm');
+        return false;
+      }
+
+      vm.idiom.language = vm.selectedLang.lang;
+
+      // TODO: move create/update logic to service
+      if (vm.idiom.id) {
+        vm.idiom.$update(successCallback, errorCallback);
+      } else {
+        vm.idiom.$save(successCallback, errorCallback);
+      }
+
+      function successCallback(res) {
+        console.log('success add idiom with id: '+res.id);
+      }
+
+      function errorCallback(res) {
+        vm.error = res.data.message;
       }
     }
 
@@ -112,30 +154,7 @@
 
     // --------End Image functions ------------
 
-    // Save Idiom
-    function save(isValid) {
-      if (!isValid) {
-        $scope.$broadcast('show-errors-check-validity', 'vm.form.idiomForm');
-        return false;
-      }
-
-      vm.idiom.language = vm.selectedLang.lang;
-
-      // TODO: move create/update logic to service
-      if (vm.idiom.id) {
-        vm.idiom.$update(successCallback, errorCallback);
-      } else {
-        vm.idiom.$save(successCallback, errorCallback);
-      }
-
-      function successCallback(res) {
-        console.log('success add idiom with id: '+res.id);
-      }
-
-      function errorCallback(res) {
-        vm.error = res.data.message;
-      }
-    }
+    // --------Start 121 Translations functions ------------
 
     // Save 121 Translations
     function saveTranslation(isValid) {
@@ -155,6 +174,14 @@
 
         //clear id and prepare for new translation
         vm.translation.id = '';
+
+        //get all translation based on idiom id
+        TranslationsByIdiomService.query({ idiomId : vm.idiom.id })
+        .$promise.then(function (res) {
+          vm.translationsByIdiom = res;
+        }, function(res) {
+          vm.error = res.data.message;
+        });
       }
 
       function errorCallback(res) {
@@ -162,6 +189,22 @@
       }
     }
 
+
+    // Delete 121 Translations
+    function removeTranslation(translationId) {
+      console.log('translationId: '+ translationId);
+
+      //get all translation based on idiom id
+      translation.delete({ translationId : translationId })
+      .$promise.then(function (res) {
+        console.log('success delete');
+      }, function(res) {
+        console.log('serror delete');
+        vm.error = res.data.message;
+      });
+    }
+
+    // --------End 121 Translations functions ------------
 
   }
 })();

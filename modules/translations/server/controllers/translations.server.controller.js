@@ -87,6 +87,31 @@ exports.list = function(req, res) {
 };
 
 /**
+ * List of Translations by Idiom
+ */
+exports.getTranslationsByIdiom = function(req, res) {
+
+  var idiomId = req.params.idiomId;
+
+  db.Translation.findAll({
+    where: {
+      idiomId: idiomId
+    },
+    include: [
+      db.User
+    ]
+  })
+  .then(function(translations) {
+    return res.json(translations);
+  })
+  .catch(function(err) {
+    return res.status(400).send({
+      message: errorHandler.getErrorMessage(err)
+    });
+  });
+};
+
+/**
  * Show the current translation
  */
 exports.read = function(req, res) {

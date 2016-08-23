@@ -7,7 +7,7 @@ var translationsPolicy = require('../policies/translations.server.policy'),
   translations = require('../controllers/translations.server.controller');
 
 module.exports = function(app) {
-  // Articles collection routes
+  // Translation collection routes
   app.route('/api/translations').all(translationsPolicy.isAllowed)
     .get(translations.list)
     .post(translations.create);
@@ -17,4 +17,8 @@ module.exports = function(app) {
     .get(translations.read)
     .put(translations.update)
     .delete(translations.delete);
+
+  // Translation by idiom id
+  app.route('/api/getTranslationsByIdiom/:idiomId').all(translationsPolicy.isAllowed)
+    .get(translations.getTranslationsByIdiom);
 };
