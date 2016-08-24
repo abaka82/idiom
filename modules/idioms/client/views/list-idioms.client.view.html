@@ -3,7 +3,7 @@
     <h1>Idioms</h1>
   </div>
   <div class="list-group">
-    <a ng-repeat="idiom in vm.idioms" ui-sref="idioms.view({ idiomId: idiom.id })" class="list-group-item">
+    <a ng-repeat="idiom in vm.idioms" ui-sref="idioms.edit({ idiomId: idiom.id })" class="list-group-item">
       <small class="list-group-item-text">
         Posted on
         <span ng-bind="idiom.createdAt | date:'mediumDate'"></span>

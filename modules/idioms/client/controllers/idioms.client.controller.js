@@ -25,8 +25,8 @@
     vm.translationRequired = false;
     vm.equivalentRequired = false;
 
-    vm.translationsByIdiom = [];
-    vm.equivalentsByIdiom = [];
+    vm.translationsByIdiom = translation;
+    vm.equivalentsByIdiom = equivalent;
 
     vm.languages = [
       { id: '1', lang: 'DE' },
@@ -44,7 +44,14 @@
       if (confirm('Are you sure you want to delete?')) {
         vm.idiom.$remove($state.go('idioms.list'));
       }
-    }
+    };
+
+    // Reload page
+    function reload() {
+      console.log('-====-');
+      $state.reload();
+      console.log('-cxvdvdf====-');
+    };
 
     // Save Idiom
     function save(isValid) {

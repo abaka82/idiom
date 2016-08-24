@@ -47,17 +47,6 @@
         data: {
           roles: ['user', 'admin']
         }
-      })
-      .state('idioms.view', {
-        url: '/:idiomId',
-        templateUrl: 'modules/idioms/client/views/view-idiom.client.view.html',
-        controller: 'IdiomsController',
-        controllerAs: 'vm',
-        resolve: {
-          idiomResolve: getIdiom,
-          translationResolve: getTranslation,
-          equivalentResolve: getEquivalent
-        }
       });
   }
 
@@ -69,19 +58,19 @@
     }).$promise;
   }
 
-  getTranslation.$inject = ['$stateParams', 'TranslationsService'];
+  getTranslation.$inject = ['$stateParams', 'TranslationsByIdiomService'];
 
-  function getTranslation($stateParams, TranslationsService) {
-    return TranslationsService.get({
-      translationId: $stateParams.translationId
+  function getTranslation($stateParams, TranslationsByIdiomService) {
+    return TranslationsByIdiomService.query({
+      idiomId: $stateParams.idiomId
     }).$promise;
   }
 
-  getEquivalent.$inject = ['$stateParams', 'EquivalentsService'];
+  getEquivalent.$inject = ['$stateParams', 'EquivalentsByIdiomService'];
 
-  function getEquivalent($stateParams, EquivalentsService) {
-    return EquivalentsService.get({
-      equivalentId: $stateParams.equivalentId
+  function getEquivalent($stateParams, EquivalentsByIdiomService) {
+    return EquivalentsByIdiomService.query({
+      idiomId: $stateParams.idiomId
     }).$promise;
   }
 
