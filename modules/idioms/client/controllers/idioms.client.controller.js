@@ -5,30 +5,39 @@
     .module('idioms')
     .controller('IdiomsController', IdiomsController);
 
-  IdiomsController.$inject = ['$http', '$scope', '$timeout', '$window', '$state', 'idiomResolve', 'translationResolve','Authentication', 'FileUploader', 'TranslationsService', 'TranslationsByIdiomService'];
+  IdiomsController.$inject = ['$http', '$scope', '$timeout', '$window', '$state', 'idiomResolve', 'translationResolve', 'equivalentResolve', 'Authentication', 'FileUploader', 'TranslationsService', 'TranslationsByIdiomService', 'EquivalentsService', 'EquivalentsByIdiomService'];
 
-  function IdiomsController($http, $scope, $timeout, $window, $state, idiom, translation, Authentication, FileUploader, TranslationsService, TranslationsByIdiomService) {
+  function IdiomsController($http, $scope, $timeout, $window, $state, idiom, translation, equivalent, Authentication, FileUploader, TranslationsService, TranslationsByIdiomService, EquivalentsService, EquivalentsByIdiomService) {
     var vm = this;
 
     vm.idiom = idiom;
     vm.translation = translation;
+    vm.equivalent = equivalent;
     vm.authentication = Authentication;
     vm.error = null;
+    vm.errorEquivalent = null;
+    vm.errorTranslation = null;
     vm.form = {};
     vm.remove = remove;
     vm.save = save;
     vm.saveTranslation = saveTranslation;
+    vm.saveEquivalent = saveEquivalent;
     vm.translationRequired = false;
+    vm.equivalentRequired = false;
 
     vm.translationsByIdiom = [];
+    vm.equivalentsByIdiom = [];
 
     vm.languages = [
       { id: '1', lang: 'DE' },
       { id: '2', lang: 'EN' },
       { id: '3', lang: 'ES' },
       { id: '4', lang: 'IT' }];
-    vm.selectedLang = { id: '1', lang: 'DE' }; //This sets the default value of the select in the ui
+
+    //Set default value of combobox in the ui
+    vm.selectedLang = { id: '1', lang: 'DE' };
     vm.selectedTranslationLang = { id: '2', lang: 'EN' };
+    vm.selectedEquivalentLang = { id: '2', lang: 'EN' };
 
     // Remove existing Idiom
     function remove() {
@@ -149,7 +158,7 @@
       .$promise.then(function (res) {
         vm.translationsByIdiom = res;
       }, function(res) {
-        vm.error = res.data.message;
+        vm.errorTranslation = res.data.message;
       });
     }
 
@@ -179,7 +188,7 @@
       }
 
       function errorCallback(res) {
-        vm.error = res.data.message;
+        vm.errorTranslation = res.data.message;
       }
     }
 
@@ -194,7 +203,7 @@
         getTranslation();
       }, function(res) {
         console.log('error delete 121 Translations');
-        vm.error = res.data.message;
+        vm.errorTranslation = res.data.message;
       });
     }
 
@@ -203,6 +212,70 @@
     };
 
     // --------End 121 Translations functions ------------
+
+
+    // --------Start Equivalent Translations functions ------------
+
+    // get all equivalent translation based on idiom id
+    function getEquivalent() {
+      EquivalentsByIdiomService.query({ idiomId : vm.idiom.id })
+      .$promise.then(function (res) {
+        vm.equivalentsByIdiom = res;
+      }, function(res) {
+        vm.errorEquivalent = res.data.message;
+      });
+    }
+
+    // Save Equivalent Translations
+    function saveEquivalent(isValid) {
+
+      // check Equivalent translation blank or not
+      if (!vm.equivalent.equiv_idiom) {
+        vm.equivalentRequired = true;
+        return false;
+      }
+
+      vm.equivalent.language = vm.selectedEquivalentLang.lang;
+      vm.equivalent.idiomId = vm.idiom.id;
+
+      vm.equivalent.$save(successCallback, errorCallback);
+
+      function successCallback(res) {
+        console.log('success add equivalent translation with id: ' + res.id);
+
+        //clear id and prepare for new equivalent translation
+        vm.equivalent.id = '';
+        vm.equivalentRequired = false;
+
+        // refresh equivalent translation list
+        getEquivalent();
+      }
+
+      function errorCallback(res) {
+        vm.errorEquivalent = res.data.message;
+      }
+    }
+
+    // Delete Equivalent Translations
+    function removeEquivalent(equivalentId) {
+
+      EquivalentsService.delete({ equivalentId : equivalentId })
+      .$promise.then(function (res) {
+        console.log('success delete equivalent Translations');
+
+        // refresh equivalent translation list
+        getEquivalent();
+      }, function(res) {
+        console.log('error delete equivalent Translations');
+        vm.errorEquivalent = res.data.message;
+      });
+    }
+
+    $scope.removeEquivalent = function(equivalentId) {
+      removeEquivalent(equivalentId);
+    };
+
+    // --------End EquivalentId Translations functions ------------
 
   }
 })();

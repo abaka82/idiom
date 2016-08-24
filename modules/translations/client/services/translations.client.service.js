@@ -16,6 +16,11 @@
       update: {
         method: 'PUT'
       }
+    }, {
+      get : {
+        method: 'GET',
+        isArray: true
+      }
     });
   }
 

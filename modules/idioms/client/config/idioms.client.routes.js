@@ -27,7 +27,8 @@
         controllerAs: 'vm',
         resolve: {
           idiomResolve: newIdiom,
-          translationResolve: newTranslation
+          translationResolve: newTranslation,
+          equivalentResolve: newEquivalent
         },
         data: {
           roles: ['user', 'admin']
@@ -40,7 +41,8 @@
         controllerAs: 'vm',
         resolve: {
           idiomResolve: getIdiom,
-          translationResolve: getTranslation
+          translationResolve: getTranslation,
+          equivalentResolve: getEquivalent
         },
         data: {
           roles: ['user', 'admin']
@@ -53,7 +55,8 @@
         controllerAs: 'vm',
         resolve: {
           idiomResolve: getIdiom,
-          translationResolve: getTranslation
+          translationResolve: getTranslation,
+          equivalentResolve: getEquivalent
         }
       });
   }
@@ -74,6 +77,14 @@
     }).$promise;
   }
 
+  getEquivalent.$inject = ['$stateParams', 'EquivalentsService'];
+
+  function getEquivalent($stateParams, EquivalentsService) {
+    return EquivalentsService.get({
+      equivalentId: $stateParams.equivalentId
+    }).$promise;
+  }
+
   newIdiom.$inject = ['IdiomsService'];
 
   function newIdiom(IdiomsService) {
@@ -84,5 +95,11 @@
 
   function newTranslation(TranslationsService) {
     return new TranslationsService();
+  }
+
+  newEquivalent.$inject = ['EquivalentsService'];
+
+  function newEquivalent(EquivalentsService) {
+    return new EquivalentsService();
   }
 })();

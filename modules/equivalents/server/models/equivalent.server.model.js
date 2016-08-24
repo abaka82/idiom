@@ -1,33 +1,32 @@
 'use strict';
 
 /**
- * Idiom Schema
+ * Equivalent Schema
  */
 module.exports = function(sequelize, DataTypes) {
 
-  var Idiom = sequelize.define('Idiom', {
-    idiom: {
+  var Equivalent = sequelize.define('Equivalent', {
+    equiv_idiom: {
       type: DataTypes.STRING(512),
       allowNull: false,
       defaultValue: '',
       unique: true
     },
     language: DataTypes.STRING(2),
-    meaning: DataTypes.STRING(2048),
-    derivation: DataTypes.STRING(2048),
-    imageURL: {
-      type: DataTypes.STRING
-    },
   }, {
     classMethods: {
       associate: function(models) {
-        Idiom.belongsTo(models.User, {
+        Equivalent.belongsTo(models.User, {
           foreignKey: 'userId',
+          foreignKeyConstraint: true
+        });
+        Equivalent.belongsTo(models.Idiom, {
+          foreignKey: 'idiomId',
           foreignKeyConstraint: true
         });
       }
     }
   });
 
-  return Idiom;
+  return Equivalent;
 };

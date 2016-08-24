@@ -13,6 +13,9 @@
               <div ng-messages="vm.form.idiomForm.idiom.$error" role="alert">
                 <p class="help-block error-text" ng-message="required">Idiom is required.</p>
               </div>
+              <div ng-show="vm.error" class="text-danger">
+                <strong ng-bind="vm.error"></strong>
+              </div>
             </div>
           </div>
 
@@ -67,19 +70,22 @@
         <div class="form-group">
           <button ng-click="vm.save(vm.form.idiomForm.$valid)" class="btn btn-success btn-lg">{{vm.idiom.id ? 'Update' : 'Create'}}</button>
         </div>
-        <div ng-show="vm.error" class="text-danger">
-          <strong ng-bind="vm.error"></strong>
-        </div>
 
+        <!-- 121 translation -->
         <div class="well">
         <div class="row" ng-show="vm.idiom.id">
           <div class="col-sm-8">
             <div class="form-group" show-errors>
-              <label class="control-label" for="translation">Add 121 translations</label>
-              <input name="translation" type="text" ng-model="vm.translation.translation" id="translation" class="form-control" placeholder="Enter 121 translation ..." ng-Keyup="vm.translationRequired=false;">
+              <label class="control-label" for="translation">Add 121 translations:</label>
+              <input name="translation" type="text" ng-model="vm.translation.translation" id="translation" class="form-control" placeholder="Enter 121 translation ..." ng-Keyup="vm.translationRequired = false;vm.errorTranslation = '';">
               <div ng-show="vm.translationRequired" class="text-danger">
                 <strong>121 translation is required.</strong>
               </div>
+              <div ng-show="vm.errorTranslation" class="text-danger">
+                <strong ng-bind="vm.errorTranslation"></strong>
+              </div>
+              vm.translationRequired: {{vm.translationRequired}}
+              vm.errorTranslation: {{vm.errorTranslation}}
             </div>
           </div>
 
@@ -92,17 +98,14 @@
           </div>
 
           <div class="col-sm-1 col-sm-offset-1">
-
-
-              <button class="btn btn-success btn-lg" ng-click="vm.saveTranslation(vm.form.idiomForm.$valid)">Add</button>
-
+            <button class="btn btn-success btn-lg" ng-click="vm.saveTranslation(vm.form.idiomForm.$valid)">Add</button>
           </div>
           <div ng-show="vm.error.translation" class="text-danger">
             <strong ng-bind="vm.error.translation"></strong>
           </div>
         </div>
-        <div class="container row" ng-show="vm.idiom.id">
-          <h4>List of 121 translations for idiom:</h4>
+        <div class="row" ng-show="vm.idiom.id">
+          <h4>List of 121 translations for the idiom:</h4>
           <table class="table table-striped">
             <thead>
               <tr>
@@ -118,7 +121,7 @@
                 <td>
                    <button
                         custom-confirmation="removeTranslation(entry.id)"
-                        custom-message="Are you sure you want to remove <strong>{{entry.translation | capitalize: all}}</strong> language <strong>{{entry.language}}</strong>?"
+                        custom-message="Are you sure you want to remove 121 translation <strong>{{entry.translation | capitalize: all}}</strong> language <strong>{{entry.language}}</strong>?"
                         class="btn btn-default">
                       <i class="fa fa-trash-o"></i>
                     </button>
@@ -127,6 +130,67 @@
             </tbody>
           </table>
         </div>
+        </div>
+
+        <!-- Equivalent translation -->
+        <div class="well">
+        <div class="row" ng-show="vm.idiom.id">
+          <div class="col-sm-8">
+            <div class="form-group" show-errors>
+              <label class="control-label" for="equivalent">Add an equivalent Idiom in other language:</label>
+              <input name="equivalent" type="text" ng-model="vm.equivalent.equiv_idiom" id="equivalent" class="form-control" placeholder="Enter equivalent idiom ..." ng-Keyup="vm.equivalentRequired = false;vm.errorEquivalent = '';">
+              <div ng-show="vm.equivalentRequired" class="text-danger">
+                <strong>Equivalent idiom is required.</strong>
+              </div>
+              <div ng-show="vm.errorEquivalent" class="text-danger">
+                <strong ng-bind="vm.errorEquivalent"></strong>
+              </div>
+            </div>
+          </div>
+
+          <div class="col-sm-1">
+            <div class="form-group">
+              <label class="control-label" for="equivalentLanguage">Language</label>
+              <select name="equivalentLanguage" id="equivalentLanguage" ng-options="option.lang for option in vm.languages track by option.id" ng-model="vm.selectedEquivalentLang" class="form-control">
+              </select>
+            </div>
+          </div>
+
+          <div class="col-sm-1 col-sm-offset-1">
+            <button class="btn btn-success btn-lg" ng-click="vm.saveEquivalent(vm.form.idiomForm.$valid)">Add</button>
+          </div>
+          <div ng-show="vm.error.equivalent" class="text-danger">
+            <strong ng-bind="vm.error.equivalent"></strong>
+          </div>
+        </div>
+        <div class="row" ng-show="vm.idiom.id">
+          <h4>List of added equivalents idioms:</h4>
+          <table class="table table-striped">
+            <thead>
+              <tr>
+                <th>Equivalent idiom</th>
+                <th>Language</th>
+                <th>Delete action</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr ng-repeat="entry in vm.equivalentsByIdiom">
+                <td>{{entry.equiv_idiom}}</td>
+                <td>{{entry.language}}</td>
+                <td>
+                   <button
+                        custom-confirmation="removeEquivalent(entry.id)"
+                        custom-message="Are you sure you want to remove equivalent idiom <strong>{{entry.equiv_idiom | capitalize: all}}</strong> language <strong>{{entry.language}}</strong>?"
+                        class="btn btn-default">
+                      <i class="fa fa-trash-o"></i>
+                    </button>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+        </div>
+
 
       </fieldset>
     </form>
