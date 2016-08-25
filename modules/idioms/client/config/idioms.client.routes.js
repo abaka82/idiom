@@ -27,8 +27,10 @@
         controllerAs: 'vm',
         resolve: {
           idiomResolve: newIdiom,
-          translationResolve: newTranslation,
-          equivalentResolve: newEquivalent
+          newTranslationResolve: newTranslation,
+          newEquivalentResolve: newEquivalent,
+          getTranslationResolve: getTranslation,
+          getEquivalentResolve: getEquivalent
         },
         data: {
           roles: ['user', 'admin']
@@ -41,8 +43,10 @@
         controllerAs: 'vm',
         resolve: {
           idiomResolve: getIdiom,
-          translationResolve: getTranslation,
-          equivalentResolve: getEquivalent
+          newTranslationResolve: newTranslation,
+          newEquivalentResolve: newEquivalent,
+          getTranslationResolve: getTranslation,
+          getEquivalentResolve: getEquivalent
         },
         data: {
           roles: ['user', 'admin']
@@ -58,20 +62,28 @@
     }).$promise;
   }
 
-  getTranslation.$inject = ['$stateParams', 'TranslationsByIdiomService'];
+  getTranslation.$inject = ['$stateParams', 'TranslationsService', 'TranslationsByIdiomService'];
 
-  function getTranslation($stateParams, TranslationsByIdiomService) {
+  function getTranslation($stateParams, TranslationsService, TranslationsByIdiomService) {
+    if (!$stateParams.idiomId) {
+      return new TranslationsService();
+    } else {
     return TranslationsByIdiomService.query({
       idiomId: $stateParams.idiomId
     }).$promise;
+    }
   }
 
-  getEquivalent.$inject = ['$stateParams', 'EquivalentsByIdiomService'];
+  getEquivalent.$inject = ['$stateParams', 'EquivalentsService', 'EquivalentsByIdiomService'];
 
-  function getEquivalent($stateParams, EquivalentsByIdiomService) {
+  function getEquivalent($stateParams, EquivalentsService, EquivalentsByIdiomService) {
+    if (!$stateParams.idiomId) {
+      return new EquivalentsService();
+    } else {
     return EquivalentsByIdiomService.query({
       idiomId: $stateParams.idiomId
     }).$promise;
+  }
   }
 
   newIdiom.$inject = ['IdiomsService'];

@@ -5,9 +5,19 @@
     .module('idioms')
     .controller('IdiomsController', IdiomsController);
 
-  IdiomsController.$inject = ['$http', '$scope', '$timeout', '$window', '$state', 'idiomResolve', 'translationResolve', 'equivalentResolve', 'Authentication', 'FileUploader', 'TranslationsService', 'TranslationsByIdiomService', 'EquivalentsService', 'EquivalentsByIdiomService'];
+  IdiomsController.$inject = ['$http', '$scope', '$timeout', '$window', '$state',
+                              'idiomResolve', 'newTranslationResolve', 'newEquivalentResolve',
+                              'getTranslationResolve', 'getEquivalentResolve',
+                              'Authentication', 'FileUploader',
+                              'TranslationsService', 'TranslationsByIdiomService',
+                              'EquivalentsService', 'EquivalentsByIdiomService'];
 
-  function IdiomsController($http, $scope, $timeout, $window, $state, idiom, translation, equivalent, Authentication, FileUploader, TranslationsService, TranslationsByIdiomService, EquivalentsService, EquivalentsByIdiomService) {
+  function IdiomsController($http, $scope, $timeout, $window, $state,
+                            idiom, translation, equivalent,
+                            getTranslationResolve, getEquivalentResolve,
+                            Authentication, FileUploader,
+                            TranslationsService, TranslationsByIdiomService,
+                            EquivalentsService, EquivalentsByIdiomService) {
     var vm = this;
 
     vm.idiom = idiom;
@@ -25,8 +35,11 @@
     vm.translationRequired = false;
     vm.equivalentRequired = false;
 
-    vm.translationsByIdiom = translation;
-    vm.equivalentsByIdiom = equivalent;
+    console.log('getTranslation: '+JSON.stringify(getTranslationResolve));
+    console.log('getEquivalent: '+JSON.stringify(getEquivalentResolve));
+
+    vm.translationsByIdiom = getTranslationResolve;
+    vm.equivalentsByIdiom = getEquivalentResolve;
 
     vm.languages = [
       { id: '1', lang: 'DE' },
@@ -41,9 +54,11 @@
 
     // Remove existing Idiom
     function remove() {
-      if (confirm('Are you sure you want to delete?')) {
-        vm.idiom.$remove($state.go('idioms.list'));
-      }
+      vm.idiom.$remove($state.go('idioms.create'));
+    }
+
+    $scope.remove = function() {
+      remove();
     };
 
     // Reload page
@@ -51,7 +66,7 @@
       console.log('-====-');
       $state.reload();
       console.log('-cxvdvdf====-');
-    };
+    }
 
     // Save Idiom
     function save(isValid) {

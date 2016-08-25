@@ -81,37 +81,50 @@ exports.changePicture = function(req, res) {
  * Delete an idiom
  */
 exports.delete = function(req, res) {
-  // console.log('* idioms.server.controller - delete *');
-
+  console.log('* idioms.server.controller - delete *');
+  console.log('* req.params.idiomId *'+req.params.idiomId);
   var id = req.params.idiomId;
 
-  db.Idiom
-    .findOne({
+  // 1. First delete equivalent translations
+  db.Equivalent.destroy({
+    where: {
+      idiomId: id
+    }
+  })
+  .then(function() {
+    // 2. Then delete 121 translations
+    db.Translation.destroy({
       where: {
-        id: id
-      },
-      include: [
-        db.User
-      ]
+        idiomId: id
+      }
     })
-    .then(function(idiom) {
-      idiom.destroy()
-        .then(function() {
-          return res.json(idiom);
-        })
-        .catch(function(err) {
-          return res.status(400).send({
-            message: errorHandler.getErrorMessage(err)
-          });
+    .then(function() {
+      // 3. Finally delete idiom
+      db.Idiom.destroy({
+        where: {
+          id: id
+        }
+      })
+      .then(function() {
+        return res.json(id);
+      })
+      .catch(function(err) {
+        return res.status(400).send({
+          message: errorHandler.getErrorMessage(err)
         });
-
-      return null;
+      });
     })
     .catch(function(err) {
       return res.status(400).send({
         message: errorHandler.getErrorMessage(err)
       });
     });
+  })
+  .catch(function(err) {
+    return res.status(400).send({
+      message: errorHandler.getErrorMessage(err)
+    });
+  });
 };
 
 /**
