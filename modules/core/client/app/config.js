@@ -11,7 +11,8 @@ var ApplicationConfiguration = (function() {
     'ui.router',
     'ui.bootstrap',
     'ui.utils',
-    'angularFileUpload'
+    'angularFileUpload',
+    'ngTable'
   ];
 
   // Add a new vertical module

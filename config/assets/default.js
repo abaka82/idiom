@@ -7,6 +7,7 @@ module.exports = {
         'public/lib/bootstrap/dist/css/bootstrap.css',
         'public/lib/bootstrap/dist/css/bootstrap-theme.css',
         'public/lib/font-awesome/css/font-awesome.css',
+        'public/lib/ng-table/dist/ng-table.css'
       ],
       js: [
         'public/lib/angular/angular.js',
@@ -23,7 +24,8 @@ module.exports = {
         'public/lib/lodash/lodash.js',
         'public/lib/moment/moment.js',
         'public/lib/angular-moment/angular-moment.js',
-        'public/lib/angular-sanitize/angular-sanitize.js'
+        'public/lib/angular-sanitize/angular-sanitize.js',
+        'public/lib/ng-table/dist/ng-table.js'
       ],
       tests: ['public/lib/angular-mocks/angular-mocks.js']
     },

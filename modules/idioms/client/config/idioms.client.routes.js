@@ -68,9 +68,9 @@
     if (!$stateParams.idiomId) {
       return new TranslationsService();
     } else {
-    return TranslationsByIdiomService.query({
-      idiomId: $stateParams.idiomId
-    }).$promise;
+      return TranslationsByIdiomService.query({
+        idiomId: $stateParams.idiomId
+      }).$promise;
     }
   }
 
@@ -80,10 +80,10 @@
     if (!$stateParams.idiomId) {
       return new EquivalentsService();
     } else {
-    return EquivalentsByIdiomService.query({
-      idiomId: $stateParams.idiomId
-    }).$promise;
-  }
+      return EquivalentsByIdiomService.query({
+        idiomId: $stateParams.idiomId
+      }).$promise;
+    }
   }
 
   newIdiom.$inject = ['IdiomsService'];
