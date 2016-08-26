@@ -11,7 +11,8 @@ var ApplicationConfiguration = (function() {
     'ui.router',
     'ui.bootstrap',
     'ui.utils',
-    'angularFileUpload'
+    'angularFileUpload',
+    'ngTable'
   ];
 
   // Add a new vertical module
@@ -115,13 +116,6 @@ angular.element(document).ready(function () {
   angular.bootstrap(document, [ApplicationConfiguration.applicationModuleName]);
 });
 
-(function (app) {
-  'use strict';
-
-  app.registerModule('chat');
-  app.registerModule('chat.routes', ['ui.router']);
-})(ApplicationConfiguration);
-
 'use strict';
 
 // Use Applicaion configuration module to register a new module
@@ -129,6 +123,12 @@ ApplicationConfiguration.registerModule('core');
 ApplicationConfiguration.registerModule('core.admin', ['core']);
 ApplicationConfiguration.registerModule('core.admin.routes', ['ui.router']);
 
+(function (app) {
+  'use strict';
+
+  app.registerModule('equivalents');
+  app.registerModule('equivalents.services');
+})(ApplicationConfiguration);
 (function (app) {
   'use strict';
 
@@ -141,7 +141,6 @@ ApplicationConfiguration.registerModule('core.admin.routes', ['ui.router']);
 
   app.registerModule('translations');
   app.registerModule('translations.services');
-  app.registerModule('translations.routes', ['ui.router', 'translations.services']);
 })(ApplicationConfiguration);
 'use strict';
 
@@ -149,103 +148,6 @@ ApplicationConfiguration.registerModule('core.admin.routes', ['ui.router']);
 ApplicationConfiguration.registerModule('users', ['core']);
 ApplicationConfiguration.registerModule('users.admin', ['core.admin']);
 ApplicationConfiguration.registerModule('users.admin.routes', ['core.admin.routes']);
-
-(function () {
-  'use strict';
-
-  angular
-    .module('chat')
-    .run(menuConfig);
-
-  menuConfig.$inject = ['Menus'];
-
-  function menuConfig(Menus) {
-    // Set top bar menu items
-    Menus.addMenuItem('topbar', {
-      title: 'Chat',
-      state: 'chat'
-    });
-  }
-})();
-
-(function () {
-  'use strict';
-
-  angular
-    .module('chat.routes')
-    .config(routeConfig);
-
-  routeConfig.$inject = ['$stateProvider'];
-
-  function routeConfig($stateProvider) {
-    $stateProvider
-      .state('chat', {
-        url: '/chat',
-        templateUrl: 'modules/chat/client/views/chat.client.view.html',
-        controller: 'ChatController',
-        controllerAs: 'vm',
-        data: {
-          roles: ['user', 'admin']
-        }
-      });
-  }
-})();
-
-(function () {
-  'use strict';
-
-  angular
-    .module('chat')
-    .controller('ChatController', ChatController);
-
-  ChatController.$inject = ['$scope', '$state', 'Authentication', 'Socket'];
-
-  function ChatController($scope, $state, Authentication, Socket) {
-    var vm = this;
-
-    vm.messages = [];
-    vm.messageText = '';
-    vm.sendMessage = sendMessage;
-
-    init();
-
-    function init() {
-      // If user is not signed in then redirect back home
-      if (!Authentication.user) {
-        $state.go('home');
-      }
-
-      // Make sure the Socket is connected
-      if (!Socket.socket) {
-        Socket.connect();
-      }
-
-      // Add an event listener to the 'chatMessage' event
-      Socket.on('chatMessage', function (message) {
-        vm.messages.unshift(message);
-      });
-
-      // Remove the event listener when the controller instance is destroyed
-      $scope.$on('$destroy', function () {
-        Socket.removeListener('chatMessage');
-      });
-    }
-
-    // Create a controller method for sending messages
-    function sendMessage() {
-      // Create a new message object
-      var message = {
-        text: vm.messageText
-      };
-
-      // Emit a 'chatMessage' message event
-      Socket.emit('chatMessage', message);
-
-      // Clear the message text
-      vm.messageText = '';
-    }
-  }
-})();
 
 'use strict';
 
@@ -725,6 +627,47 @@ angular.module('core').service('Socket', ['Authentication', '$state', '$timeout'
   'use strict';
 
   angular
+    .module('equivalents.services')
+    .factory('EquivalentsService', EquivalentsService)
+    .factory('EquivalentsByIdiomService', EquivalentsByIdiomService);
+
+  EquivalentsService.$inject = ['$resource'];
+  EquivalentsByIdiomService.$inject = ['$resource'];
+
+  function EquivalentsService($resource) {
+    return $resource('api/equivalents/:equivalentId', {
+      equivalentId: '@id'
+    }, {
+      update: {
+        method: 'PUT'
+      }
+    }, {
+      get : {
+        method: 'GET',
+        isArray: true
+      }
+    });
+  }
+
+  function EquivalentsByIdiomService($resource) {
+    return $resource('api/getEquivalentsByIdiom/:idiomId', {
+      idiomId: '@idiomId'
+    }, {
+      update: {
+        method: 'PUT'
+      }
+    }, {
+      get : {
+        method: 'GET',
+        isArray: true
+      }
+    });
+  }
+})();
+(function() {
+  'use strict';
+
+  angular
     .module('idioms')
     .run(menuConfig);
 
@@ -781,7 +724,10 @@ angular.module('core').service('Socket', ['Authentication', '$state', '$timeout'
         controllerAs: 'vm',
         resolve: {
           idiomResolve: newIdiom,
-          translationResolve: newTranslation
+          newTranslationResolve: newTranslation,
+          newEquivalentResolve: newEquivalent,
+          getTranslationResolve: getTranslation,
+          getEquivalentResolve: getEquivalent
         },
         data: {
           roles: ['user', 'admin']
@@ -794,20 +740,13 @@ angular.module('core').service('Socket', ['Authentication', '$state', '$timeout'
         controllerAs: 'vm',
         resolve: {
           idiomResolve: getIdiom,
-          translationResolve: getTranslation
+          newTranslationResolve: newTranslation,
+          newEquivalentResolve: newEquivalent,
+          getTranslationResolve: getTranslation,
+          getEquivalentResolve: getEquivalent
         },
         data: {
           roles: ['user', 'admin']
-        }
-      })
-      .state('idioms.view', {
-        url: '/:idiomId',
-        templateUrl: 'modules/idioms/client/views/view-idiom.client.view.html',
-        controller: 'IdiomsController',
-        controllerAs: 'vm',
-        resolve: {
-          idiomResolve: getIdiom,
-          translationResolve: getTranslation
         }
       });
   }
@@ -820,12 +759,28 @@ angular.module('core').service('Socket', ['Authentication', '$state', '$timeout'
     }).$promise;
   }
 
-  getTranslation.$inject = ['$stateParams', 'TranslationsService'];
+  getTranslation.$inject = ['$stateParams', 'TranslationsService', 'TranslationsByIdiomService'];
 
-  function getTranslation($stateParams, TranslationsService) {
-    return TranslationsService.get({
-      translationId: $stateParams.translationId
-    }).$promise;
+  function getTranslation($stateParams, TranslationsService, TranslationsByIdiomService) {
+    if (!$stateParams.idiomId) {
+      return new TranslationsService();
+    } else {
+      return TranslationsByIdiomService.query({
+        idiomId: $stateParams.idiomId
+      }).$promise;
+    }
+  }
+
+  getEquivalent.$inject = ['$stateParams', 'EquivalentsService', 'EquivalentsByIdiomService'];
+
+  function getEquivalent($stateParams, EquivalentsService, EquivalentsByIdiomService) {
+    if (!$stateParams.idiomId) {
+      return new EquivalentsService();
+    } else {
+      return EquivalentsByIdiomService.query({
+        idiomId: $stateParams.idiomId
+      }).$promise;
+    }
   }
 
   newIdiom.$inject = ['IdiomsService'];
@@ -839,6 +794,12 @@ angular.module('core').service('Socket', ['Authentication', '$state', '$timeout'
   function newTranslation(TranslationsService) {
     return new TranslationsService();
   }
+
+  newEquivalent.$inject = ['EquivalentsService'];
+
+  function newEquivalent(EquivalentsService) {
+    return new EquivalentsService();
+  }
 })();
 (function() {
   'use strict';
@@ -847,32 +808,91 @@ angular.module('core').service('Socket', ['Authentication', '$state', '$timeout'
     .module('idioms')
     .controller('IdiomsController', IdiomsController);
 
-  IdiomsController.$inject = ['$http', '$scope', '$timeout', '$window', '$state', 'idiomResolve', 'translationResolve','Authentication', 'FileUploader'];
+  IdiomsController.$inject = ['$http', '$scope', '$timeout', '$window', '$state',
+                              'idiomResolve', 'newTranslationResolve', 'newEquivalentResolve',
+                              'getTranslationResolve', 'getEquivalentResolve',
+                              'Authentication', 'FileUploader',
+                              'TranslationsService', 'TranslationsByIdiomService',
+                              'EquivalentsService', 'EquivalentsByIdiomService'];
 
-  function IdiomsController($http, $scope, $timeout, $window, $state, idiom, translation, Authentication, FileUploader) {
+  function IdiomsController($http, $scope, $timeout, $window, $state,
+                            idiom, translation, equivalent,
+                            getTranslationResolve, getEquivalentResolve,
+                            Authentication, FileUploader,
+                            TranslationsService, TranslationsByIdiomService,
+                            EquivalentsService, EquivalentsByIdiomService) {
     var vm = this;
 
     vm.idiom = idiom;
     vm.translation = translation;
+    vm.equivalent = equivalent;
     vm.authentication = Authentication;
     vm.error = null;
+    vm.errorEquivalent = null;
+    vm.errorTranslation = null;
     vm.form = {};
     vm.remove = remove;
     vm.save = save;
     vm.saveTranslation = saveTranslation;
+    vm.saveEquivalent = saveEquivalent;
+    vm.translationRequired = false;
+    vm.equivalentRequired = false;
+
+    console.log('getTranslation: '+JSON.stringify(getTranslationResolve));
+    console.log('getEquivalent: '+JSON.stringify(getEquivalentResolve));
+
+    vm.translationsByIdiom = getTranslationResolve;
+    vm.equivalentsByIdiom = getEquivalentResolve;
 
     vm.languages = [
       { id: '1', lang: 'DE' },
       { id: '2', lang: 'EN' },
       { id: '3', lang: 'ES' },
       { id: '4', lang: 'IT' }];
-    vm.selectedLang = { id: '1', lang: 'DE' }; //This sets the default value of the select in the ui
+
+    //Set default value of combobox in the ui
+    vm.selectedLang = { id: '1', lang: 'DE' };
     vm.selectedTranslationLang = { id: '2', lang: 'EN' };
+    vm.selectedEquivalentLang = { id: '2', lang: 'EN' };
 
     // Remove existing Idiom
     function remove() {
-      if (confirm('Are you sure you want to delete?')) {
-        vm.idiom.$remove($state.go('idioms.list'));
+      vm.idiom.$remove($state.go('idioms.create'));
+    }
+
+    $scope.remove = function() {
+      remove();
+    };
+
+    // Reload page
+    function reload() {
+      console.log('-====-');
+      $state.reload();
+      console.log('-cxvdvdf====-');
+    }
+
+    // Save Idiom
+    function save(isValid) {
+      if (!isValid) {
+        $scope.$broadcast('show-errors-check-validity', 'vm.form.idiomForm');
+        return false;
+      }
+
+      vm.idiom.language = vm.selectedLang.lang;
+
+      // TODO: move create/update logic to service
+      if (vm.idiom.id) {
+        vm.idiom.$update(successCallback, errorCallback);
+      } else {
+        vm.idiom.$save(successCallback, errorCallback);
+      }
+
+      function successCallback(res) {
+        console.log('success add idiom with id: '+res.id);
+      }
+
+      function errorCallback(res) {
+        vm.error = res.data.message;
       }
     }
 
@@ -954,36 +974,25 @@ angular.module('core').service('Socket', ['Authentication', '$state', '$timeout'
 
     // --------End Image functions ------------
 
-    // Save Idiom
-    function save(isValid) {
-      if (!isValid) {
-        $scope.$broadcast('show-errors-check-validity', 'vm.form.idiomForm');
-        return false;
-      }
 
-      vm.idiom.language = vm.selectedLang.lang;
+    // --------Start 121 Translations functions ------------
 
-      // TODO: move create/update logic to service
-      if (vm.idiom.id) {
-        vm.idiom.$update(successCallback, errorCallback);
-      } else {
-        vm.idiom.$save(successCallback, errorCallback);
-      }
-
-      function successCallback(res) {
-        console.log('success add idiom with id: '+res.id);
-      }
-
-      function errorCallback(res) {
-        vm.error = res.data.message;
-      }
+    // get all translation based on idiom id
+    function getTranslation() {
+      TranslationsByIdiomService.query({ idiomId : vm.idiom.id })
+      .$promise.then(function (res) {
+        vm.translationsByIdiom = res;
+      }, function(res) {
+        vm.errorTranslation = res.data.message;
+      });
     }
 
     // Save 121 Translations
     function saveTranslation(isValid) {
 
-      if (!isValid) {
-        $scope.$broadcast('show-errors-check-validity', 'vm.form.idiomForm');
+      // check 121 translation blank or not
+      if (!vm.translation.translation) {
+        vm.translationRequired = true;
         return false;
       }
 
@@ -993,35 +1002,156 @@ angular.module('core').service('Socket', ['Authentication', '$state', '$timeout'
       vm.translation.$save(successCallback, errorCallback);
 
       function successCallback(res) {
-        console.log('success add translation with id: '+res.id);
+        console.log('success add 121 translation with id: '+res.id);
 
         //clear id and prepare for new translation
         vm.translation.id = '';
+        vm.translationRequired = false;
+
+        // refresh translation list
+        getTranslation();
       }
 
       function errorCallback(res) {
-        vm.error = res.data.message;
+        vm.errorTranslation = res.data.message;
       }
     }
 
+    // Delete 121 Translations
+    function removeTranslation(translationId) {
+
+      TranslationsService.delete({ translationId : translationId })
+      .$promise.then(function (res) {
+        console.log('success delete 121 Translations');
+
+        // refresh translation list
+        getTranslation();
+      }, function(res) {
+        console.log('error delete 121 Translations');
+        vm.errorTranslation = res.data.message;
+      });
+    }
+
+    $scope.removeTranslation = function(translationId) {
+      removeTranslation(translationId);
+    };
+
+    // --------End 121 Translations functions ------------
+
+
+    // --------Start Equivalent Translations functions ------------
+
+    // get all equivalent translation based on idiom id
+    function getEquivalent() {
+      EquivalentsByIdiomService.query({ idiomId : vm.idiom.id })
+      .$promise.then(function (res) {
+        vm.equivalentsByIdiom = res;
+      }, function(res) {
+        vm.errorEquivalent = res.data.message;
+      });
+    }
+
+    // Save Equivalent Translations
+    function saveEquivalent(isValid) {
+
+      // check Equivalent translation blank or not
+      if (!vm.equivalent.equiv_idiom) {
+        vm.equivalentRequired = true;
+        return false;
+      }
+
+      vm.equivalent.language = vm.selectedEquivalentLang.lang;
+      vm.equivalent.idiomId = vm.idiom.id;
+
+      vm.equivalent.$save(successCallback, errorCallback);
+
+      function successCallback(res) {
+        console.log('success add equivalent translation with id: ' + res.id);
+
+        //clear id and prepare for new equivalent translation
+        vm.equivalent.id = '';
+        vm.equivalentRequired = false;
+
+        // refresh equivalent translation list
+        getEquivalent();
+      }
+
+      function errorCallback(res) {
+        vm.errorEquivalent = res.data.message;
+      }
+    }
+
+    // Delete Equivalent Translations
+    function removeEquivalent(equivalentId) {
+
+      EquivalentsService.delete({ equivalentId : equivalentId })
+      .$promise.then(function (res) {
+        console.log('success delete equivalent Translations');
+
+        // refresh equivalent translation list
+        getEquivalent();
+      }, function(res) {
+        console.log('error delete equivalent Translations');
+        vm.errorEquivalent = res.data.message;
+      });
+    }
+
+    $scope.removeEquivalent = function(equivalentId) {
+      removeEquivalent(equivalentId);
+    };
+
+    // --------End EquivalentId Translations functions ------------
 
   }
 })();
-(function () {
   'use strict';
 
   angular
-    .module('idioms')
-    .controller('IdiomsListController', IdiomsListController);
-
-  IdiomsListController.$inject = ['IdiomsService'];
-
-  function IdiomsListController(IdiomsService) {
+  .module('idioms')
+  .controller('IdiomsListController', ["$scope", "$filter", "IdiomsService", "NgTableParams", function ($scope, $filter, IdiomsService, NgTableParams) {
     var vm = this;
+/*
+     vm.searchKeyword = { Title: '', Author: '', Category:'', Stock:'' };
 
-    vm.idioms = IdiomsService.query();
-  }
-})();
+          vm.order = function(predicate) {
+            vm.reverse = (vm.predicate === predicate) ? !vm.reverse : false;
+            vm.predicate = predicate;
+          };*/
+
+    var orderBy = $filter('orderBy');
+    vm.listIdiomTable = new NgTableParams({
+      page: 1,
+      count: 10000000000,
+      filter: vm.searchKeyword
+    }, {
+      total: 0, // length of data
+      // page size buttons (right set of buttons in demo)
+      counts: [],
+      // determines the pager buttons (left set of buttons in demo)
+      paginationMaxBlocks: 13,
+      paginationMinBlocks: 2,
+      getData: function (params) {
+        IdiomsService.query({}, function(response) {
+          vm.products = response;
+          console.log('==vm.products========'+JSON.stringify(vm.products));
+          //$scope.data = $scope.products.slice((params.page() - 1) * params.count(), params.page() * params.count());
+          //if (params.filter().Title || params.filter().Author || params.filter().Category || params.filter().Stock  ) {
+          vm.data = $filter('filter')(vm.products, params.filter());
+          params.total(vm.data.length); 
+          // } else {
+          vm.data = vm.products.slice((params.page() - 1) * params.count(), params.page() * params.count());
+          params.total(vm.products.length); 
+          // }
+
+          // set total for recalc pagination
+          //$defer.resolve(vm.data;);
+          console.log('==vm.data========'+JSON.stringify(vm.data));
+          return vm.data;
+        });
+      }
+    });
+  }]);
+
 
 (function() {
   'use strict';
@@ -1046,181 +1176,12 @@ angular.module('core').service('Socket', ['Authentication', '$state', '$timeout'
   'use strict';
 
   angular
-    .module('translations')
-    .run(menuConfig);
-
-  menuConfig.$inject = ['Menus'];
-
-  function menuConfig(Menus) {
-    Menus.addMenuItem('topbar', {
-      title: 'Translations',
-      state: 'translations',
-      type: 'dropdown',
-      roles: ['*']
-    });
-
-    // Add the dropdown list item
-    Menus.addSubMenuItem('topbar', 'translations', {
-      title: 'List Translations',
-      state: 'translations.list'
-    });
-
-    // Add the dropdown create item
-    Menus.addSubMenuItem('topbar', 'translations', {
-      title: 'Create Translation',
-      state: 'translations.create',
-      roles: ['user', 'admin']
-    });
-  }
-})();
-(function() {
-  'use strict';
-
-  angular
-    .module('translations.routes')
-    .config(routeConfig);
-
-  routeConfig.$inject = ['$stateProvider'];
-
-  function routeConfig($stateProvider) {
-    $stateProvider
-      .state('translations', {
-        abstract: true,
-        url: '/translations',
-        template: '<ui-view/>'
-      })
-      .state('translations.list', {
-        url: '',
-        templateUrl: 'modules/translations/client/views/list-translations.client.view.html',
-        controller: 'TranslationsListController',
-        controllerAs: 'vm'
-      })
-      .state('translations.create', {
-        url: '/create',
-        templateUrl: 'modules/translations/client/views/form-translation.client.view.html',
-        controller: 'TranslationsController',
-        controllerAs: 'vm',
-        resolve: {
-          translationResolve: newTranslation
-        },
-        data: {
-          roles: ['user', 'admin']
-        }
-      })
-      .state('translations.edit', {
-        url: '/:translationId/edit',
-        templateUrl: 'modules/translations/client/views/form-translation.client.view.html',
-        controller: 'TranslationsController',
-        controllerAs: 'vm',
-        resolve: {
-          translationResolve: getTranslation
-        },
-        data: {
-          roles: ['user', 'admin']
-        }
-      })
-      .state('translations.view', {
-        url: '/:translationId',
-        templateUrl: 'modules/translations/client/views/view-translation.client.view.html',
-        controller: 'TranslationsController',
-        controllerAs: 'vm',
-        resolve: {
-          translationResolve: getTranslation
-        }
-      });
-  }
-
-  getTranslation.$inject = ['$stateParams', 'TranslationsService'];
-
-  function getTranslation($stateParams, TranslationsService) {
-    return TranslationsService.get({
-      translationId: $stateParams.translationId
-    }).$promise;
-  }
-
-  newTranslation.$inject = ['TranslationsService'];
-
-  function newTranslation(TranslationsService) {
-    return new TranslationsService();
-  }
-})();
-(function () {
-  'use strict';
-
-  angular
-    .module('translations')
-    .controller('TranslationsListController', TranslationsListController);
-
-  TranslationsListController.$inject = ['TranslationsService'];
-
-  function TranslationsListController(TranslationsService) {
-    var vm = this;
-
-    vm.translations = TranslationsService.query();
-  }
-})();
-
-(function() {
-  'use strict';
-
-  angular
-    .module('translations')
-    .controller('TranslationsController', TranslationsController);
-
-  TranslationsController.$inject = ['$http', '$scope', '$state', 'translationResolve', 'Authentication'];
-
-  function TranslationsController($http, $scope, $state, translation, Authentication) {
-    var vm = this;
-
-    vm.translation = translation;
-    vm.authentication = Authentication;
-    vm.error = null;
-    vm.form = {};
-    vm.remove = remove;
-    vm.save = save;
-
-    // Remove existing Translation
-    function remove() {
-      if (confirm('Are you sure you want to delete?')) {
-        vm.translation.$remove($state.go('translations.list'));
-      }
-    }
-
-    // Save Translation
-    function save(isValid) {
-      if (!isValid) {
-        $scope.$broadcast('show-errors-check-validity', 'vm.form.translationForm');
-        return false;
-      }
-
-      // TODO: move create/update logic to service
-      if (vm.translation.id) {
-        vm.translation.$update(successCallback, errorCallback);
-      } else {
-        vm.translation.$save(successCallback, errorCallback);
-      }
-
-      function successCallback(res) {
-        $state.go('translations.view', {
-          translationId: res.id
-        });
-      }
-
-      function errorCallback(res) {
-        vm.error = res.data.message;
-      }
-
-    }
-  }
-})();
-(function() {
-  'use strict';
-
-  angular
     .module('translations.services')
-    .factory('TranslationsService', TranslationsService);
+    .factory('TranslationsService', TranslationsService)
+    .factory('TranslationsByIdiomService', TranslationsByIdiomService);
 
   TranslationsService.$inject = ['$resource'];
+  TranslationsByIdiomService.$inject = ['$resource'];
 
   function TranslationsService($resource) {
     return $resource('api/translations/:translationId', {
@@ -1228,6 +1189,26 @@ angular.module('core').service('Socket', ['Authentication', '$state', '$timeout'
     }, {
       update: {
         method: 'PUT'
+      }
+    }, {
+      get : {
+        method: 'GET',
+        isArray: true
+      }
+    });
+  }
+
+  function TranslationsByIdiomService($resource) {
+    return $resource('api/getTranslationsByIdiom/:idiomId', {
+      idiomId: '@idiomId'
+    }, {
+      update: {
+        method: 'PUT'
+      }
+    }, {
+      get : {
+        method: 'GET',
+        isArray: true
       }
     });
   }

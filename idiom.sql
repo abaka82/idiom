@@ -3,7 +3,7 @@
 -- http://www.phpmyadmin.net
 --
 -- Host: 127.0.0.1
--- Generation Time: Aug 16, 2016 at 05:15 PM
+-- Generation Time: Aug 26, 2016 at 03:47 AM
 -- Server version: 10.1.13-MariaDB
 -- PHP Version: 5.6.23
 
@@ -14,11 +14,26 @@ SET time_zone = "+00:00";
 /*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
 /*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */;
 /*!40101 SET @OLD_COLLATION_CONNECTION=@@COLLATION_CONNECTION */;
-/*!40101 SET NAMES utf8mb4 */;
 
 --
 -- Database: `idiom`
 --
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `equivalents`
+--
+
+CREATE TABLE `equivalents` (
+  `id` int(11) NOT NULL,
+  `equiv_idiom` varchar(512) NOT NULL DEFAULT '',
+  `language` varchar(2) DEFAULT NULL,
+  `createdAt` datetime NOT NULL,
+  `updatedAt` datetime NOT NULL,
+  `userId` int(11) DEFAULT NULL,
+  `idiomId` int(11) DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 -- --------------------------------------------------------
 
@@ -30,6 +45,7 @@ CREATE TABLE `idioms` (
   `id` int(11) NOT NULL,
   `idiom` varchar(512) NOT NULL DEFAULT '',
   `language` varchar(2) DEFAULT NULL,
+  `meaning` varchar(2048) DEFAULT NULL,
   `derivation` varchar(2048) DEFAULT NULL,
   `imageURL` varchar(255) DEFAULT NULL,
   `createdAt` datetime NOT NULL,
@@ -55,9 +71,9 @@ CREATE TABLE `roles` (
 --
 
 INSERT INTO `roles` (`id`, `name`, `createdAt`, `updatedAt`) VALUES
-(1, 'admin', '2016-08-13 00:00:00', '2016-08-13 00:00:00'),
-(2, 'guest', '2016-08-13 00:00:00', '2016-08-13 00:00:00'),
-(3, 'user', '2016-08-13 00:00:00', '2016-08-13 00:00:00');
+(1, 'admin', '2016-08-24 04:32:10', '2016-08-24 04:32:10'),
+(2, 'guest', '2016-08-24 04:32:10', '2016-08-24 04:32:10'),
+(3, 'user', '2016-08-24 04:32:10', '2016-08-24 04:32:10');
 
 -- --------------------------------------------------------
 
@@ -148,10 +164,22 @@ INSERT INTO `users` (`id`, `firstName`, `lastName`, `displayName`, `email`, `use
 --
 
 --
+-- Indexes for table `equivalents`
+--
+ALTER TABLE `equivalents`
+  ADD PRIMARY KEY (`id`),
+  ADD UNIQUE KEY `equiv_idiom` (`equiv_idiom`),
+  ADD UNIQUE KEY `Equivalents_equiv_idiom_unique` (`equiv_idiom`),
+  ADD KEY `userId` (`userId`),
+  ADD KEY `idiomId` (`idiomId`);
+
+--
 -- Indexes for table `idioms`
 --
 ALTER TABLE `idioms`
   ADD PRIMARY KEY (`id`),
+  ADD UNIQUE KEY `idiom` (`idiom`),
+  ADD UNIQUE KEY `Idioms_idiom_unique` (`idiom`),
   ADD KEY `userId` (`userId`);
 
 --
@@ -198,6 +226,11 @@ ALTER TABLE `users`
 --
 
 --
+-- AUTO_INCREMENT for table `equivalents`
+--
+ALTER TABLE `equivalents`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+--
 -- AUTO_INCREMENT for table `idioms`
 --
 ALTER TABLE `idioms`
@@ -206,7 +239,7 @@ ALTER TABLE `idioms`
 -- AUTO_INCREMENT for table `roles`
 --
 ALTER TABLE `roles`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
 --
 -- AUTO_INCREMENT for table `translations`
 --
@@ -216,10 +249,17 @@ ALTER TABLE `translations`
 -- AUTO_INCREMENT for table `users`
 --
 ALTER TABLE `users`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
 --
 -- Constraints for dumped tables
 --
+
+--
+-- Constraints for table `equivalents`
+--
+ALTER TABLE `equivalents`
+  ADD CONSTRAINT `equivalents_ibfk_1` FOREIGN KEY (`userId`) REFERENCES `users` (`id`) ON DELETE SET NULL ON UPDATE CASCADE,
+  ADD CONSTRAINT `equivalents_ibfk_2` FOREIGN KEY (`idiomId`) REFERENCES `idioms` (`id`) ON DELETE SET NULL ON UPDATE CASCADE;
 
 --
 -- Constraints for table `idioms`
