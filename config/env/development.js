@@ -72,12 +72,11 @@ module.exports = {
   db: {
     options: {
       logging: process.env.DB_LOGGING === 'true' ? console.log : false,
-      //host: process.env.DB_HOST || '127.0.0.1',
-      host: 'sql7.freemysqlhosting.net',
-      port: process.env.DB_PORT || '3306',
-      database: 'sql7131742',
-      password: '1NgFpWVCfq',
-      username: 'sql7131742'
+      host: 'www.db4free.net',
+      port: '3306',
+      database: 'abaka82_idiom',
+      password: 'abaka82_idiom',
+      username: 'abaka82_idiom'
     },
     sync: {
       //force: process.env.DB_FORCE === 'true' ? true : false
