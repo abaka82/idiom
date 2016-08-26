@@ -2,107 +2,112 @@
   <div class="page-header">
     <h1>Idioms</h1>
   </div>
-  <div class="list-group">
-    <a ng-repeat="idiom in vm.idioms" ui-sref="idioms.edit({ idiomId: idiom.id })" class="list-group-item">
-      <small class="list-group-item-text">
-        Posted on
-        <span ng-bind="idiom.createdAt | date:'mediumDate'"></span>
-        by
-        <span ng-if="idiom.User" ng-bind="idiom.User.displayName"></span>
-        <span ng-if="!idiom.User">Deleted User</span>
-      </small>
-      <h4 class="list-group-item-heading" ng-bind="idiom.idiom"></h4>
-      <p class="list-group-item-text" ng-bind="idiom.derivation"></p>
-    </a>
-
-
-
-                   <table ng-table="vm.listIdiomTable" show-filter="true" class="table table-condensed table-bordered table-striped">
-                        <thead>
-                        <tr>
-                            <th data-toggle="true" style="width:200px;">
-                                ID
-                            </th>
-                            <th data-toggle="true" ng-click="order('Title')" style="width:200px;">
-                              Idiom
-                              <span class="sortorder" ng-show="predicate === 'Title'" ng-class="{reverse:reverse}"></span>
-                            </th>
-                            <th data-hide="phone" ng-click="order('Status')" style="width:200px;">  Meaning
-                              <span class="sortorder" ng-show="predicate === 'Status'" ng-class="{reverse:reverse}"></span>
-                            </th>
-                            <th data-hide="phone" ng-click="order('Status')" style="width:200px;">  Derivation
-                              <span class="sortorder" ng-show="predicate === 'Status'" ng-class="{reverse:reverse}"></span>
-                            </th>
-                            <th class="text-right" data-sort-ignore="true">Action</th>
-
-                        </tr>
-                        </thead>
-                        <tbody ng-click="setSelected(product._id)" ng-class="{selected: product._id === idSelectedVote}" ng-repeat="product in vm.data | orderBy:predicate:reverse">{{data}}
-                        <tr  ng-click="product.expanded = product.expanded ? false : true;">
-                        
-                            <td style="word-wrap:break-word;width:300px;text-align: left;">
-                             <table style="margin-top: -5px;"> 
-                             <tr>
-                                 <td>{{product.id}}</td>
-                             </tr>
-
-                             </table>
-                             
-                            </td>
-                            <td style="word-wrap:break-word;width:500px;text-align: left;">
-                                 {{product.idiom}}
-                            </td>
-                            <td style="word-wrap:break-word;width:500px;text-align: left;">
-                                 {{product.meaning}}
-                            </td>
-                            <td style="word-wrap:break-word;width:500px;text-align: left;">
-                                 {{product.derivation}}
-                            </td>
-                            <td class="text-right">
-                                <div class="btn-group">
-                                  <table>
-                                  <tr>
-                                    <td>
-                                      <a class="btn btn-primary btn btn-xs" style="width:50px;" ui-sref="commerce.product_details({ id : product._id})">View</a>
-                                      </td>
-                                    </tr>
-                                    <tr><td>&nbsp;</td></tr>
-                                    <tr>
-                                    <td>
-                                       <a class="btn btn-primary btn btn-xs" ui-sref="admin.edit_product({ id : product._id })" style="width:50px;">Edit</a>
-                                       </td>
-                                    </tr>
-                                    <tr><td>&nbsp;</td></tr>
-                                     <tr>
-                                    <td>
-                                       <a class="btn btn-danger btn btn-xs" confirmed-click="deleteProduct(product._id, product.Stock)" ng-confirm-click="Do yo want to delete {{product.Title}} ?" style="width:50px;">Delete</a>
-                                       </td>
-                                    </tr>
-                                    </table>
-                                </div>
-                            </td>
-                        </tr>
-                         <tr ng-if="product.expanded" ng-repeat-end="">
-                            <td colspan="2" style="text-align: center;font-weight: bold"> Image</td>
-                            <td colspan="8" style="text-align: center;font-weight: bold">Description</td>
-                         </tr>
-                         <tr ng-if="product.expanded" ng-repeat-end="" >
-                            <td colspan="2">
-                             <div style="word-wrap:break-word;">  
-                                <img src="{{product.imageUrl}}" alt="{{product.Iitle}}" class="img-responsive" style="margin-left:auto;margin-right:auto;">
-                             </div>
-                            </td>
-                         
-                         
-                            <td colspan="8">
-                            <div style="word-wrap:break-word;"> {{product.Description}} </div></td>
-                          </tr>
-                        </tbody>
-                      
-                    </table>
-
-  </div>
-  <div class="alert alert-warning text-center" ng-if="vm.idioms.$resolved && !vm.idioms.length">
-    No idioms yet, why don't you <a ui-sref="idioms.create">create one</a>?
-  </div>
+       <div class="row well">
+            <div class="col-sm-4">
+                <div class="form-group">
+                    <label class="control-label" for="searchIdiom">Search Idiom:</label>
+                    <input type="text" id="searchIdiom" name="searchIdiom" value="" placeholder="Enter idiom keyword" class="form-control" ng-model="vm.searchKeyword.idiom" >
+                </div>
+            </div>
+            <div class="col-sm-3">
+                <div class="form-group">
+                    <label class="control-label" for="price">Derivation</label>
+                    <input type="text" id="derivation" name="derivation" value="" placeholder="Enter derivation keyword" class="form-control" ng-model="vm.searchKeyword.derivation">
+                </div>
+            </div>
+            <div class="col-sm-2">
+                <a class="btn btn-primary" ng-click="vm.searchKeyword.idiom='';vm.searchKeyword.idiom='';">Clear all</a>
+            </div>
+        </div>
+    </div>
+  <h3>Search result for:</h3>
+  <table ng-table="vm.listIdiomTable" show-filter="true" class="table table-condensed table-bordered table-striped">
+    <thead>
+    <tr>
+        <th ng-click="vm.order('id')" style="width:50px;cursor: pointer;">
+          ID
+          <span class="sortorder" ng-show="vm.predicate === 'id'" ng-class="{reverse:vm.reverse}"></span>
+        </th>
+        <th ng-click="vm.order('idiom')" style="width:200px;cursor: pointer;">
+          Idiom
+          <span class="sortorder" ng-show="vm.predicate === 'idiom'" ng-class="{reverse:vm.reverse}"></span>
+        </th>
+        <th ng-click="vm.order('language')" style="width:50px;cursor: pointer;">  Lang.
+          <span class="sortorder" ng-show="vm.predicate === 'language'" ng-class="{reverse:vm.reverse}"></span>
+        </th>
+        <th ng-click="vm.order('translation')" style="width:200px;cursor: pointer;">
+          121 Translation
+          <span class="sortorder" ng-show="vm.predicate === 'translation'" ng-class="{reverse:vm.reverse}"></span>
+        </th>
+        <th ng-click="vm.order('translationLang')" style="width:200px;cursor: pointer;">
+          121 Lang
+          <span class="sortorder" ng-show="vm.predicate === 'translationLang'" ng-class="{reverse:vm.reverse}"></span>
+        </th>
+        <th ng-click="vm.order('imageURL')" style="width:200px;cursor: pointer;">
+          Image
+          <span class="sortorder" ng-show="vm.predicate === 'imageURL'" ng-class="{reverse:vm.reverse}"></span>
+        </th>
+        <th ng-click="vm.order('derivation')" style="width:200px;cursor: pointer;">
+          Derivation
+          <span class="sortorder" ng-show="vm.predicate === 'derivation'" ng-class="{reverse:vm.reverse}"></span>
+        </th>
+        <th ng-click="vm.order('equivalent_count')" style="width:200px;cursor: pointer;">
+          Native Equivalent
+          <span class="sortorder" ng-show="vm.predicate === 'equivalent_count'" ng-class="{reverse:vm.reverse}"></span>
+        </th>
+        <th class="text-right" data-sort-ignore="true">Action</th>
+    </tr>
+    </thead>
+    <tbody ng-click="setSelected(entry.id)" ng-class="{selected: entry.id === idSelectedVote}" ng-repeat="entry in vm.data | orderBy:vm.predicate:vm.reverse">
+      <tr ng-click="entry.expanded = entry.expanded ? false : true;">
+        <td style="word-wrap:break-word;width:300px;text-align: left;">
+          {{entry.id}}
+        </td>
+        <td style="word-wrap:break-word;width:500px;text-align: left;">
+          {{entry.idiom}}
+        </td>
+        <td style="word-wrap:break-word;width:500px;text-align: left;">
+          {{entry.language}}
+        </td>
+        <td style="word-wrap:break-word;width:500px;text-align: left;">
+          {{entry.translation}}
+        </td>
+        <td style="word-wrap:break-word;width:500px;text-align: left;">
+          {{entry.translationLang}}
+        </td>
+        <td style="word-wrap:break-word;width:500px;text-align: left;">
+          {{entry.imageURL}}
+        </td>
+        <td style="word-wrap:break-word;width:500px;text-align: left;">
+          {{entry.derivation}}
+        </td>
+        <td style="word-wrap:break-word;width:500px;text-align: left;">
+          {{entry.equivalent_count}}
+        </td>
+        <td class="text-right">
+            <div class="btn-group">
+              <table>
+              <tr>
+                <td>
+                  <button ui-sref="idioms.edit({ idiomId: entry.id })"
+                    class="btn btn-success pull-right">
+                    <i class="fa fa-pencil-square-o"></i>
+                  </button>
+                </td>
+                <td>&nbsp;&nbsp;</td>
+                <td>
+                  <button
+                    custom-confirmation="remove(entry.id)"
+                    custom-message="Are you sure want to remove idiom <strong>{{entry.translation | capitalize: all}}</strong> and all its 121 and equivalent translations?"
+                    class="btn btn-danger pull-right">
+                    <i class="fa fa-trash-o"></i>
+                  </button>
+                </td>
+              </tr>
+              </table>
+            </div>
+        </td>
+      </tr>
+    <tbody>
+  </table>
 </section>

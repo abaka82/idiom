@@ -75,7 +75,7 @@
           <button
             custom-confirmation="remove()"
             custom-message="Are you sure want to remove idiom <strong>{{entry.translation | capitalize: all}}</strong> and all its 121 and equivalent translations?"
-            class="btn btn-success btn-lg pull-right">
+            class="btn btn-danger btn-lg pull-right">
             <i class="fa fa-trash-o"></i>
           </button>
         </div>
@@ -129,7 +129,7 @@
                    <button
                         custom-confirmation="removeTranslation(entry.id)"
                         custom-message="Are you sure want to remove 121 translation <strong>{{entry.translation | capitalize: all}}</strong> language <strong>{{entry.language}}</strong>?"
-                        class="btn btn-default">
+                        class="btn btn-danger">
                       <i class="fa fa-trash-o"></i>
                     </button>
                 </td>
@@ -188,7 +188,7 @@
                    <button
                         custom-confirmation="removeEquivalent(entry.id)"
                         custom-message="Are you sure want to remove equivalent idiom <strong>{{entry.equiv_idiom | capitalize: all}}</strong> language <strong>{{entry.language}}</strong>?"
-                        class="btn btn-default">
+                        class="btn btn-danger">
                       <i class="fa fa-trash-o"></i>
                     </button>
                 </td>
