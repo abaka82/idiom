@@ -20,9 +20,9 @@ module.exports = {
       }
     }
   },
-  port: process.env.PORT || 8443,
+  port: process.env.PORT || 3000,
   secure: {
-    ssl: true,
+    ssl: false,
     privateKey: './config/sslcerts/key.pem',
     certificate: './config/sslcerts/cert.pem'
   },
@@ -71,11 +71,15 @@ module.exports = {
   db: {
     options: {
       logging: process.env.DB_LOGGING === 'true' ? console.log : false,
-      host: process.env.DB_HOST || 'localhost',
-      port: process.env.DB_PORT || '5432'
+      host: 'www.db4free.net',
+      port: '3306',
+      database: 'abaka82_idiom',
+      password: 'abaka82_idiom',
+      username: 'abaka82_idiom'
     },
     sync: {
-      force: process.env.DB_FORCE === 'true' ? true : false
+      //force: process.env.DB_FORCE === 'true' ? true : false
+      force: false
     }
   },
   seed: {
@@ -99,7 +103,8 @@ module.exports = {
         roles: ['user', 'admin']
       }
     },
-    init: process.env.DB_SEED === 'true' ? true : false,
+    //init: process.env.DB_SEED === 'true' ? true : false,
+    init: false,
     logging: process.env.DB_SEED_LOGGING === 'false' ? false : true
   }
 };

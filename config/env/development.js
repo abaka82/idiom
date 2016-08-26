@@ -68,18 +68,19 @@ module.exports = {
   },
   livereload: true,
   roles: ['admin', 'guest', 'user'],
+  //roles: ['admin'],
   db: {
     options: {
       logging: process.env.DB_LOGGING === 'true' ? console.log : false,
-      //host: process.env.DB_HOST || '127.0.0.1',
-      host: '127.0.0.1',
-      port: process.env.DB_PORT || '3306',
-      database: 'idiom',
-      password: '',
-      username: 'root'
+      host: 'www.db4free.net',
+      port: '3306',
+      database: 'abaka82_idiom',
+      password: 'abaka82_idiom',
+      username: 'abaka82_idiom'
     },
     sync: {
-      force: process.env.DB_FORCE === 'true' ? true : false
+      //force: process.env.DB_FORCE === 'true' ? true : false
+      force: false
     }
   },
   seed: {
@@ -104,7 +105,7 @@ module.exports = {
       }
     },
     //init: process.env.DB_SEED === 'true' ? true : false,
-    init: true,
+    init: false,
     logging: process.env.DB_SEED_LOGGING === 'false' ? false : true
   }
 };
