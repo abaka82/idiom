@@ -865,11 +865,14 @@ angular.module('core').service('Socket', ['Authentication', '$state', '$timeout'
     };
 
     // Reload page
-    function reload() {
-      console.log('-====-');
+    function newIdiom() {
       $state.reload();
-      console.log('-cxvdvdf====-');
-    }
+      
+    };
+
+    $scope.newIdiom = function() {
+      newIdiom();
+    };
 
     // Save Idiom
     function save(isValid) {
@@ -1108,45 +1111,56 @@ angular.module('core').service('Socket', ['Authentication', '$state', '$timeout'
 
   angular
   .module('idioms')
-  .controller('IdiomsListController', ["$scope", "$filter", "IdiomsService", "NgTableParams", function ($scope, $filter, IdiomsService, NgTableParams) {
+  .controller('IdiomsListController', ["$scope", "$filter", "$state", "IdiomsService", "NgTableParams", function ($scope, $filter, $state, IdiomsService, NgTableParams) {
     var vm = this;
-/*
-     vm.searchKeyword = { Title: '', Author: '', Category:'', Stock:'' };
-
-          vm.order = function(predicate) {
-            vm.reverse = (vm.predicate === predicate) ? !vm.reverse : false;
-            vm.predicate = predicate;
-          };*/
 
     var orderBy = $filter('orderBy');
+    vm.searchKeyword = { idiom: '', derivation: '' };
+
+    function remove(id) {
+      IdiomsService.delete({ idiomId : id })
+      .$promise.then(function (res) {
+        console.log('success delete idiom id: '+ id);
+        $state.reload();
+      }, function(res) {
+        console.log('error delete idiom id: '+ id);
+        vm.errorTranslation = res.data.message;
+      });
+    }
+
+    $scope.remove = function(id) {
+      remove(id);
+    };
+
+    vm.order = function(predicate) {
+      vm.reverse = (vm.predicate === predicate) ? !vm.reverse : false;
+      vm.predicate = predicate;
+    };
+
+
     vm.listIdiomTable = new NgTableParams({
       page: 1,
-      count: 10000000000,
+      count: 10,  //items per page
       filter: vm.searchKeyword
     }, {
       total: 0, // length of data
-      // page size buttons (right set of buttons in demo)
-      counts: [],
-      // determines the pager buttons (left set of buttons in demo)
-      paginationMaxBlocks: 13,
-      paginationMinBlocks: 2,
-      getData: function (params) {
+      getData: function ($defer, params) {
         IdiomsService.query({}, function(response) {
-          vm.products = response;
-          console.log('==vm.products========'+JSON.stringify(vm.products));
-          //$scope.data = $scope.products.slice((params.page() - 1) * params.count(), params.page() * params.count());
-          //if (params.filter().Title || params.filter().Author || params.filter().Category || params.filter().Stock  ) {
-          vm.data = $filter('filter')(vm.products, params.filter());
-          params.total(vm.data.length); 
-          // } else {
-          vm.data = vm.products.slice((params.page() - 1) * params.count(), params.page() * params.count());
-          params.total(vm.products.length); 
-          // }
+          vm.idioms = response;
+
+          if (params.filter().idiom || params.filter().derivation) {
+            vm.data = $filter('filter')(vm.idioms, params.filter());
+            console.log('==params.filter()======='+JSON.stringify(params.filter()));
+            console.log('==vm.searchKeyword======='+JSON.stringify(vm.searchKeyword));
+            console.log('==vm.data filter========'+JSON.stringify(vm.data));
+            params.total(vm.data.length); 
+          } else {
+            vm.data = vm.idioms.slice((params.page() - 1) * params.count(), params.page() * params.count());
+            params.total(vm.idioms.length); 
+          }
 
           // set total for recalc pagination
-          //$defer.resolve(vm.data;);
-          console.log('==vm.data========'+JSON.stringify(vm.data));
-          return vm.data;
+          $defer.resolve(vm.data);
         });
       }
     });
