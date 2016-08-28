@@ -8,14 +8,14 @@
   IdiomsController.$inject = ['$http', '$scope', '$timeout', '$window', '$state',
                               'idiomResolve', 'newTranslationResolve', 'newEquivalentResolve',
                               'getTranslationResolve', 'getEquivalentResolve',
-                              'Authentication', 'FileUploader',
+                              'Authentication', 'FileUploader', 'toastr',
                               'TranslationsService', 'TranslationsByIdiomService',
                               'EquivalentsService', 'EquivalentsByIdiomService'];
 
   function IdiomsController($http, $scope, $timeout, $window, $state,
                             idiom, translation, equivalent,
                             getTranslationResolve, getEquivalentResolve,
-                            Authentication, FileUploader,
+                            Authentication, FileUploader, toastr,
                             TranslationsService, TranslationsByIdiomService,
                             EquivalentsService, EquivalentsByIdiomService) {
     var vm = this;
@@ -55,6 +55,7 @@
     // Remove existing Idiom
     function remove() {
       vm.idiom.$remove($state.go('idioms.create'));
+      toastr.success('Idiom has been deleted successfully');
     }
 
     $scope.remove = function() {
@@ -62,11 +63,14 @@
     };
 
     // Reload page
-    function reload() {
-      console.log('-====-');
+    function newIdiom() {
       $state.reload();
-      console.log('-cxvdvdf====-');
+      
     }
+
+    $scope.newIdiom = function() {
+      newIdiom();
+    };
 
     // Save Idiom
     function save(isValid) {
@@ -86,10 +90,12 @@
 
       function successCallback(res) {
         console.log('success add idiom with id: '+res.id);
+        toastr.success('New idiom has been added successfully. Please continue to add image, 121 translation, and its equivalent.');
       }
 
       function errorCallback(res) {
         vm.error = res.data.message;
+        toastr.error(res.data.message, 'There is an error');
       }
     }
 
@@ -139,6 +145,7 @@
 
       // Clear upload buttons
       vm.cancelUpload();
+      toastr.success('Picture has been added successfully.');
     };
 
     // Called after the user has failed to uploaded a new picture
@@ -148,6 +155,7 @@
 
       // Show error message
       vm.error = response.message;
+      toastr.error(response.message, 'There is an error');
     };
 
     // Change user profile picture

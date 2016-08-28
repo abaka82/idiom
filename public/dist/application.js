@@ -868,7 +868,7 @@ angular.module('core').service('Socket', ['Authentication', '$state', '$timeout'
     function newIdiom() {
       $state.reload();
       
-    };
+    }
 
     $scope.newIdiom = function() {
       newIdiom();

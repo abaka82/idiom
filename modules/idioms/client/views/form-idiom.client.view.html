@@ -69,7 +69,7 @@
 
         <div class="form-group">
           <button ng-click="vm.save(vm.form.idiomForm.$valid)" class="btn btn-success btn-lg">{{vm.idiom.id ? 'Update' : 'Create'}}</button>
-          <button class="btn btn-success btn-lg" ng-click="vm.reload()">New Idiom</button>
+          <button class="btn btn-success btn-lg" ng-click="newIdiom()">New Idiom</button>
           <button ui-sref="home" class="btn btn-success btn-lg">Cancel</button>
 
           <button

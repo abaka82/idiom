@@ -3,16 +3,17 @@
     <h1>Idioms</h1>
   </div>
        <div class="row well">
-            <div class="col-sm-4">
+            <div class="col-sm-5">
                 <div class="form-group">
                     <label class="control-label" for="searchIdiom">Search Idiom:</label>
                     <input type="text" id="searchIdiom" name="searchIdiom" value="" placeholder="Enter idiom keyword" class="form-control" ng-model="vm.searchKeyword.idiom" >
                 </div>
             </div>
-            <div class="col-sm-3">
+            <div class="col-sm-2">
                 <div class="form-group">
-                    <label class="control-label" for="price">Derivation</label>
-                    <input type="text" id="derivation" name="derivation" value="" placeholder="Enter derivation keyword" class="form-control" ng-model="vm.searchKeyword.derivation">
+                  <label class="control-label" for="language">Language</label>
+                  <select name="language" id="language" ng-options="option.lang for option in vm.languages track by option.id" ng-model="vm.selectedLang" class="form-control" ng-change="vm.changeLang()">
+                  </select>
                 </div>
             </div>
             <div class="col-sm-2">

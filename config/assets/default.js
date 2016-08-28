@@ -7,7 +7,9 @@ module.exports = {
         'public/lib/bootstrap/dist/css/bootstrap.css',
         'public/lib/bootstrap/dist/css/bootstrap-theme.css',
         'public/lib/font-awesome/css/font-awesome.css',
-        'public/lib/ng-table/dist/ng-table.css'
+        'public/lib/ng-table/dist/ng-table.css',
+        'public/lib/pace/corner.css',
+        'public/lib/angular-toastr/dist/angular-toastr.css'
       ],
       js: [
         'public/lib/angular/angular.js',
@@ -25,7 +27,10 @@ module.exports = {
         'public/lib/moment/moment.js',
         'public/lib/angular-moment/angular-moment.js',
         'public/lib/angular-sanitize/angular-sanitize.js',
-        'public/lib/ng-table/dist/ng-table.js'
+        'public/lib/ng-table/dist/ng-table.js',
+        'public/lib/pace/pace.min.js',
+        'public/lib/angular-toastr/dist/angular-toastr.js',
+        'public/lib/angular-toastr/dist/angular-toastr.tpls.js'
       ],
       tests: ['public/lib/angular-mocks/angular-mocks.js']
     },

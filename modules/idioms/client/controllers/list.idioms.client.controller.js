@@ -2,19 +2,35 @@
 
   angular
   .module('idioms')
-  .controller('IdiomsListController', function ($scope, $filter, $state, IdiomsService, NgTableParams) {
+  .controller('IdiomsListController', function ($scope, $filter, $state, toastr, IdiomsService, NgTableParams) {
     var vm = this;
 
     var orderBy = $filter('orderBy');
-    vm.searchKeyword = { idiom: '', derivation: '' };
+    vm.searchKeyword = { idiom: '', language: '' };
+
+    vm.languages = [
+      { id: '1', lang: 'DE' },
+      { id: '2', lang: 'EN' },
+      { id: '3', lang: 'ES' },
+      { id: '4', lang: 'IT' },
+      { id: '5', lang: '' }];
+
+    //Set default value of combobox in the ui
+    vm.selectedLang = { id: '5', lang: '' };
+
+    vm.changeLang = function() {
+      vm.searchKeyword.language = vm.selectedLang.lang;
+    };
 
     function remove(id) {
       IdiomsService.delete({ idiomId : id })
       .$promise.then(function (res) {
         console.log('success delete idiom id: '+ id);
+        toastr.success('Idiom has been deleted successfully');
         $state.reload();
       }, function(res) {
         console.log('error delete idiom id: '+ id);
+        toastr.error(res.data.message, 'There is an error');
         vm.errorTranslation = res.data.message;
       });
     }
@@ -39,11 +55,9 @@
         IdiomsService.query({}, function(response) {
           vm.idioms = response;
 
-          if (params.filter().idiom || params.filter().derivation) {
+          if (params.filter().idiom || params.filter().language) {
             vm.data = $filter('filter')(vm.idioms, params.filter());
             console.log('==params.filter()======='+JSON.stringify(params.filter()));
-            console.log('==vm.searchKeyword======='+JSON.stringify(vm.searchKeyword));
-            console.log('==vm.data filter========'+JSON.stringify(vm.data));
             params.total(vm.data.length); 
           } else {
             vm.data = vm.idioms.slice((params.page() - 1) * params.count(), params.page() * params.count());
