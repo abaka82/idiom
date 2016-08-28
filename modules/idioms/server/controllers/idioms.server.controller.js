@@ -135,9 +135,9 @@ exports.list = function(req, res) {
 
   db.sequelize.query('SELECT a.*, b.translation, b.language AS translationLang, ' +
                      '(SELECT COUNT(*) ' +
-                     'FROM equivalents c ' +
+                     'FROM Equivalents c ' +
                      'WHERE c.idiomId = a.id) AS equivalent_count ' +
-                     'FROM idioms a, translations b WHERE b.idiomId = a.id',
+                     'FROM Idioms a, Translations b WHERE b.idiomId = a.id',
                     { type: db.sequelize.QueryTypes.SELECT })
   .then(function(idioms) {
     return res.json(idioms);
