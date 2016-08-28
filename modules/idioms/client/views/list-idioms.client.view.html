@@ -77,7 +77,8 @@
           {{entry.translationLang}}
         </td>
         <td style="word-wrap:break-word;width:500px;text-align: left;">
-          {{entry.imageURL}}
+          <img ng-src="{{entry.imageURL}}" ng-show="entry.imageURL" class="img-thumbnail user-profile-picture">
+          <div ng-hide="entry.imageURL">No</div>
         </td>
         <td style="word-wrap:break-word;width:500px;text-align: left;">
           {{entry.derivation}}
