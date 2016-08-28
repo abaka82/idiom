@@ -12,7 +12,8 @@ var ApplicationConfiguration = (function() {
     'ui.bootstrap',
     'ui.utils',
     'angularFileUpload',
-    'ngTable'
+    'ngTable',
+    'toastr'
   ];
 
   // Add a new vertical module
@@ -811,14 +812,14 @@ angular.module('core').service('Socket', ['Authentication', '$state', '$timeout'
   IdiomsController.$inject = ['$http', '$scope', '$timeout', '$window', '$state',
                               'idiomResolve', 'newTranslationResolve', 'newEquivalentResolve',
                               'getTranslationResolve', 'getEquivalentResolve',
-                              'Authentication', 'FileUploader',
+                              'Authentication', 'FileUploader', 'toastr',
                               'TranslationsService', 'TranslationsByIdiomService',
                               'EquivalentsService', 'EquivalentsByIdiomService'];
 
   function IdiomsController($http, $scope, $timeout, $window, $state,
                             idiom, translation, equivalent,
                             getTranslationResolve, getEquivalentResolve,
-                            Authentication, FileUploader,
+                            Authentication, FileUploader, toastr,
                             TranslationsService, TranslationsByIdiomService,
                             EquivalentsService, EquivalentsByIdiomService) {
     var vm = this;
@@ -858,6 +859,7 @@ angular.module('core').service('Socket', ['Authentication', '$state', '$timeout'
     // Remove existing Idiom
     function remove() {
       vm.idiom.$remove($state.go('idioms.create'));
+      toastr.success('Idiom has been deleted successfully');
     }
 
     $scope.remove = function() {
@@ -892,10 +894,12 @@ angular.module('core').service('Socket', ['Authentication', '$state', '$timeout'
 
       function successCallback(res) {
         console.log('success add idiom with id: '+res.id);
+        toastr.success('New idiom has been added successfully. Please continue to add image, 121 translation, and its equivalent.');
       }
 
       function errorCallback(res) {
         vm.error = res.data.message;
+        toastr.error(res.data.message, 'There is an error');
       }
     }
 
@@ -945,6 +949,7 @@ angular.module('core').service('Socket', ['Authentication', '$state', '$timeout'
 
       // Clear upload buttons
       vm.cancelUpload();
+      toastr.success('Picture has been added successfully.');
     };
 
     // Called after the user has failed to uploaded a new picture
@@ -954,6 +959,7 @@ angular.module('core').service('Socket', ['Authentication', '$state', '$timeout'
 
       // Show error message
       vm.error = response.message;
+      toastr.error(response.message, 'There is an error');
     };
 
     // Change user profile picture
@@ -1111,19 +1117,35 @@ angular.module('core').service('Socket', ['Authentication', '$state', '$timeout'
 
   angular
   .module('idioms')
-  .controller('IdiomsListController', ["$scope", "$filter", "$state", "IdiomsService", "NgTableParams", function ($scope, $filter, $state, IdiomsService, NgTableParams) {
+  .controller('IdiomsListController', ["$scope", "$filter", "$state", "toastr", "IdiomsService", "NgTableParams", function ($scope, $filter, $state, toastr, IdiomsService, NgTableParams) {
     var vm = this;
 
     var orderBy = $filter('orderBy');
-    vm.searchKeyword = { idiom: '', derivation: '' };
+    vm.searchKeyword = { idiom: '', language: '' };
+
+    vm.languages = [
+      { id: '1', lang: 'DE' },
+      { id: '2', lang: 'EN' },
+      { id: '3', lang: 'ES' },
+      { id: '4', lang: 'IT' },
+      { id: '5', lang: '' }];
+
+    //Set default value of combobox in the ui
+    vm.selectedLang = { id: '5', lang: '' };
+
+    vm.changeLang = function() {
+      vm.searchKeyword.language = vm.selectedLang.lang;
+    };
 
     function remove(id) {
       IdiomsService.delete({ idiomId : id })
       .$promise.then(function (res) {
         console.log('success delete idiom id: '+ id);
+        toastr.success('Idiom has been deleted successfully');
         $state.reload();
       }, function(res) {
         console.log('error delete idiom id: '+ id);
+        toastr.error(res.data.message, 'There is an error');
         vm.errorTranslation = res.data.message;
       });
     }
@@ -1148,11 +1170,9 @@ angular.module('core').service('Socket', ['Authentication', '$state', '$timeout'
         IdiomsService.query({}, function(response) {
           vm.idioms = response;
 
-          if (params.filter().idiom || params.filter().derivation) {
+          if (params.filter().idiom || params.filter().language) {
             vm.data = $filter('filter')(vm.idioms, params.filter());
             console.log('==params.filter()======='+JSON.stringify(params.filter()));
-            console.log('==vm.searchKeyword======='+JSON.stringify(vm.searchKeyword));
-            console.log('==vm.data filter========'+JSON.stringify(vm.data));
             params.total(vm.data.length); 
           } else {
             vm.data = vm.idioms.slice((params.page() - 1) * params.count(), params.page() * params.count());
@@ -1233,8 +1253,8 @@ angular.module('core').service('Socket', ['Authentication', '$state', '$timeout'
 angular.module('users.admin').run(['Menus',
   function (Menus) {
     Menus.addSubMenuItem('topbar', 'admin', {
-      title: 'Manage Users',
-      state: 'admin.users'
+      title: 'Register New User',
+      state: 'authentication.signup'
     });
   }
 ]);
