@@ -8,7 +8,7 @@ module.exports = {
         'public/lib/bootstrap/dist/css/bootstrap-theme.css',
         'public/lib/font-awesome/css/font-awesome.css',
         'public/lib/ng-table/dist/ng-table.css',
-        'public/lib/pace/corner.css',
+        'public/lib/PACE/themes/blue/pace-theme-corner-indicator.css',
         'public/lib/angular-toastr/dist/angular-toastr.css'
       ],
       js: [
@@ -28,7 +28,7 @@ module.exports = {
         'public/lib/angular-moment/angular-moment.js',
         'public/lib/angular-sanitize/angular-sanitize.js',
         'public/lib/ng-table/dist/ng-table.js',
-        'public/lib/pace/pace.min.js',
+        'public/lib/PACE/pace.js',
         'public/lib/angular-toastr/dist/angular-toastr.js',
         'public/lib/angular-toastr/dist/angular-toastr.tpls.js'
       ],
