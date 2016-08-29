@@ -25,7 +25,7 @@ SET time_zone = "+00:00";
 -- Table structure for table `equivalents`
 --
 
-CREATE TABLE `equivalents` (
+CREATE TABLE `Equivalents` (
   `id` int(11) NOT NULL,
   `equiv_idiom` varchar(512) NOT NULL DEFAULT '',
   `language` varchar(2) DEFAULT NULL,
@@ -41,7 +41,7 @@ CREATE TABLE `equivalents` (
 -- Table structure for table `idioms`
 --
 
-CREATE TABLE `idioms` (
+CREATE TABLE `Idioms` (
   `id` int(11) NOT NULL,
   `idiom` varchar(512) NOT NULL DEFAULT '',
   `language` varchar(2) DEFAULT NULL,
@@ -59,7 +59,7 @@ CREATE TABLE `idioms` (
 -- Table structure for table `roles`
 --
 
-CREATE TABLE `roles` (
+CREATE TABLE `Roles` (
   `id` int(11) NOT NULL,
   `name` varchar(255) DEFAULT NULL,
   `createdAt` datetime NOT NULL,
@@ -70,7 +70,7 @@ CREATE TABLE `roles` (
 -- Dumping data for table `roles`
 --
 
-INSERT INTO `roles` (`id`, `name`, `createdAt`, `updatedAt`) VALUES
+INSERT INTO `Roles` (`id`, `name`, `createdAt`, `updatedAt`) VALUES
 (1, 'admin', '2016-08-24 04:32:10', '2016-08-24 04:32:10'),
 (2, 'guest', '2016-08-24 04:32:10', '2016-08-24 04:32:10'),
 (3, 'user', '2016-08-24 04:32:10', '2016-08-24 04:32:10');
@@ -81,7 +81,7 @@ INSERT INTO `roles` (`id`, `name`, `createdAt`, `updatedAt`) VALUES
 -- Table structure for table `sessions`
 --
 
-CREATE TABLE `sessions` (
+CREATE TABLE `Sessions` (
   `sid` varchar(255) NOT NULL,
   `expires` datetime DEFAULT NULL,
   `data` text,
@@ -95,7 +95,7 @@ CREATE TABLE `sessions` (
 -- Table structure for table `translations`
 --
 
-CREATE TABLE `translations` (
+CREATE TABLE `Translations` (
   `id` int(11) NOT NULL,
   `translation` varchar(512) NOT NULL DEFAULT '',
   `language` varchar(2) DEFAULT NULL,
@@ -111,7 +111,7 @@ CREATE TABLE `translations` (
 -- Table structure for table `userrole`
 --
 
-CREATE TABLE `userrole` (
+CREATE TABLE `UserRole` (
   `createdAt` datetime NOT NULL,
   `updatedAt` datetime NOT NULL,
   `RoleId` int(11) NOT NULL,
@@ -122,7 +122,7 @@ CREATE TABLE `userrole` (
 -- Dumping data for table `userrole`
 --
 
-INSERT INTO `userrole` (`createdAt`, `updatedAt`, `RoleId`, `UserId`) VALUES
+INSERT INTO `UserRole` (`createdAt`, `updatedAt`, `RoleId`, `UserId`) VALUES
 ('2016-08-13 15:25:11', '2016-08-13 15:25:11', 1, 1),
 ('2016-08-13 15:25:11', '2016-08-13 15:25:11', 1, 2),
 ('2016-08-13 00:00:00', '2016-08-13 00:00:00', 1, 3);
@@ -133,7 +133,7 @@ INSERT INTO `userrole` (`createdAt`, `updatedAt`, `RoleId`, `UserId`) VALUES
 -- Table structure for table `users`
 --
 
-CREATE TABLE `users` (
+CREATE TABLE `Users` (
   `id` int(11) NOT NULL,
   `firstName` varchar(255) NOT NULL,
   `lastName` varchar(255) NOT NULL,
@@ -154,7 +154,7 @@ CREATE TABLE `users` (
 -- Dumping data for table `users`
 --
 
-INSERT INTO `users` (`id`, `firstName`, `lastName`, `displayName`, `email`, `username`, `password`, `salt`, `profileImageURL`, `provider`, `resetPasswordToken`, `resetPasswordExpires`, `createdAt`, `updatedAt`) VALUES
+INSERT INTO `Users` (`id`, `firstName`, `lastName`, `displayName`, `email`, `username`, `password`, `salt`, `profileImageURL`, `provider`, `resetPasswordToken`, `resetPasswordExpires`, `createdAt`, `updatedAt`) VALUES
 (1, 'User', 'Local', 'User Local', 'user@localhost.com', 'user', 'CrW7wJO4H3wPR2l1Gwqa9jNbOESHDjKcl3ASIregPgm/POCVaPglgJrfXfiblAJQl/TfBNO8/8ZVPYlC6q5aXQ==', 'pXU5TbsjKKB3YH4St4xuHQ==', 'modules/users/client/img/profile/default.png', 'local', NULL, NULL, '2016-08-13 15:25:11', '2016-08-13 15:25:11'),
 (2, 'Admin', 'Local', 'Admin Local', 'admin@localhost.com', 'admin', '5/+AQ4r2TwR98+SNOYo0n/VP+K/ROELQ89JZHJ5+d16g4EmwRnnjBC8PjnoltdyW00cMFjO//WPdWm+VyypVGQ==', 'hvEvhkv7ULyGbKO0BqSRcg==', 'modules/users/client/img/profile/default.png', 'local', NULL, NULL, '2016-08-13 15:25:11', '2016-08-13 15:25:11'),
 (3, 'idiom', 'idiom', 'idiom idiom', 'idiom@idiom.com', 'idiom', '3f6nwvahtaoxgK6KogtMYDxH3hbrs+02tzeTonZYgTLwfd1RtLURVA3zy84qe2akDgbCbSHG9ECJ+Q3QQA4Maw==', '19t8uhRxk6IyCgL6nieFPA==', './modules/users/client/img/profile/uploads/f71d5c8dc77fe7ea50d00dc92870b442', 'local', NULL, NULL, '2016-08-13 15:26:28', '2016-08-15 03:47:20');
@@ -166,7 +166,7 @@ INSERT INTO `users` (`id`, `firstName`, `lastName`, `displayName`, `email`, `use
 --
 -- Indexes for table `equivalents`
 --
-ALTER TABLE `equivalents`
+ALTER TABLE `Equivalents`
   ADD PRIMARY KEY (`id`),
   ADD UNIQUE KEY `equiv_idiom` (`equiv_idiom`),
   ADD UNIQUE KEY `Equivalents_equiv_idiom_unique` (`equiv_idiom`),
@@ -176,7 +176,7 @@ ALTER TABLE `equivalents`
 --
 -- Indexes for table `idioms`
 --
-ALTER TABLE `idioms`
+ALTER TABLE `Idioms`
   ADD PRIMARY KEY (`id`),
   ADD UNIQUE KEY `idiom` (`idiom`),
   ADD UNIQUE KEY `Idioms_idiom_unique` (`idiom`),
@@ -185,7 +185,7 @@ ALTER TABLE `idioms`
 --
 -- Indexes for table `roles`
 --
-ALTER TABLE `roles`
+ALTER TABLE `Roles`
   ADD PRIMARY KEY (`id`),
   ADD UNIQUE KEY `name` (`name`),
   ADD UNIQUE KEY `Roles_name_unique` (`name`);
@@ -193,13 +193,13 @@ ALTER TABLE `roles`
 --
 -- Indexes for table `sessions`
 --
-ALTER TABLE `sessions`
+ALTER TABLE `Sessions`
   ADD PRIMARY KEY (`sid`);
 
 --
 -- Indexes for table `translations`
 --
-ALTER TABLE `translations`
+ALTER TABLE `Translations`
   ADD PRIMARY KEY (`id`),
   ADD KEY `userId` (`userId`),
   ADD KEY `idiomId` (`idiomId`);
@@ -207,14 +207,14 @@ ALTER TABLE `translations`
 --
 -- Indexes for table `userrole`
 --
-ALTER TABLE `userrole`
+ALTER TABLE `UserRole`
   ADD PRIMARY KEY (`RoleId`,`UserId`),
   ADD KEY `UserId` (`UserId`);
 
 --
 -- Indexes for table `users`
 --
-ALTER TABLE `users`
+ALTER TABLE `Users`
   ADD PRIMARY KEY (`id`),
   ADD UNIQUE KEY `email` (`email`),
   ADD UNIQUE KEY `username` (`username`),
@@ -228,27 +228,27 @@ ALTER TABLE `users`
 --
 -- AUTO_INCREMENT for table `equivalents`
 --
-ALTER TABLE `equivalents`
+ALTER TABLE `Equivalents`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
 --
 -- AUTO_INCREMENT for table `idioms`
 --
-ALTER TABLE `idioms`
+ALTER TABLE `Idioms`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
 --
 -- AUTO_INCREMENT for table `roles`
 --
-ALTER TABLE `roles`
+ALTER TABLE `Roles`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
 --
 -- AUTO_INCREMENT for table `translations`
 --
-ALTER TABLE `translations`
+ALTER TABLE `Translations`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
 --
 -- AUTO_INCREMENT for table `users`
 --
-ALTER TABLE `users`
+ALTER TABLE `Users`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
 --
 -- Constraints for dumped tables
@@ -257,29 +257,29 @@ ALTER TABLE `users`
 --
 -- Constraints for table `equivalents`
 --
-ALTER TABLE `equivalents`
-  ADD CONSTRAINT `equivalents_ibfk_1` FOREIGN KEY (`userId`) REFERENCES `users` (`id`) ON DELETE SET NULL ON UPDATE CASCADE,
-  ADD CONSTRAINT `equivalents_ibfk_2` FOREIGN KEY (`idiomId`) REFERENCES `idioms` (`id`) ON DELETE SET NULL ON UPDATE CASCADE;
+ALTER TABLE `Equivalents`
+  ADD CONSTRAINT `equivalents_ibfk_1` FOREIGN KEY (`userId`) REFERENCES `Users` (`id`) ON DELETE SET NULL ON UPDATE CASCADE,
+  ADD CONSTRAINT `equivalents_ibfk_2` FOREIGN KEY (`idiomId`) REFERENCES `Idioms` (`id`) ON DELETE SET NULL ON UPDATE CASCADE;
 
 --
 -- Constraints for table `idioms`
 --
-ALTER TABLE `idioms`
-  ADD CONSTRAINT `idioms_ibfk_1` FOREIGN KEY (`userId`) REFERENCES `users` (`id`) ON DELETE SET NULL ON UPDATE CASCADE;
+ALTER TABLE `Idioms`
+  ADD CONSTRAINT `idioms_ibfk_1` FOREIGN KEY (`userId`) REFERENCES `Users` (`id`) ON DELETE SET NULL ON UPDATE CASCADE;
 
 --
 -- Constraints for table `translations`
 --
-ALTER TABLE `translations`
-  ADD CONSTRAINT `translations_ibfk_1` FOREIGN KEY (`userId`) REFERENCES `users` (`id`) ON DELETE SET NULL ON UPDATE CASCADE,
-  ADD CONSTRAINT `translations_ibfk_2` FOREIGN KEY (`idiomId`) REFERENCES `idioms` (`id`) ON DELETE SET NULL ON UPDATE CASCADE;
+ALTER TABLE `Translations`
+  ADD CONSTRAINT `translations_ibfk_1` FOREIGN KEY (`userId`) REFERENCES `Users` (`id`) ON DELETE SET NULL ON UPDATE CASCADE,
+  ADD CONSTRAINT `translations_ibfk_2` FOREIGN KEY (`idiomId`) REFERENCES `Idioms` (`id`) ON DELETE SET NULL ON UPDATE CASCADE;
 
 --
 -- Constraints for table `userrole`
 --
-ALTER TABLE `userrole`
-  ADD CONSTRAINT `userrole_ibfk_1` FOREIGN KEY (`RoleId`) REFERENCES `roles` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
-  ADD CONSTRAINT `userrole_ibfk_2` FOREIGN KEY (`UserId`) REFERENCES `users` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
+ALTER TABLE `UserRole`
+  ADD CONSTRAINT `userrole_ibfk_1` FOREIGN KEY (`RoleId`) REFERENCES `Roles` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
+  ADD CONSTRAINT `userrole_ibfk_2` FOREIGN KEY (`UserId`) REFERENCES `Users` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
 /*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
