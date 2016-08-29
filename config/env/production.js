@@ -71,11 +71,11 @@ module.exports = {
   db: {
     options: {
       logging: process.env.DB_LOGGING === 'true' ? console.log : false,
-      host: 'vwp15123.webpack.hosteurope.de',
+      host: 'www.db4free.net',
       port: '3306',
-      database: 'db12035986-idiomania',
-      password: '!Dim0Manner',
-      username: 'db12035986-idiom'
+      database: 'abaka82_idiom',
+      password: 'abaka82_idiom',
+      username: 'abaka82_idiom'
     },
     sync: {
       //force: process.env.DB_FORCE === 'true' ? true : false
