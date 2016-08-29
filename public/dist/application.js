@@ -1137,6 +1137,12 @@ angular.module('core').service('Socket', ['Authentication', '$state', '$timeout'
       vm.searchKeyword.language = vm.selectedLang.lang;
     };
 
+    vm.clearSearch = function() {
+      vm.searchKeyword.idiom='';
+      vm.selectedLang = { id: '5', lang: '' };
+      vm.searchKeyword.language = vm.selectedLang.lang;
+    };
+
     function remove(id) {
       IdiomsService.delete({ idiomId : id })
       .$promise.then(function (res) {
