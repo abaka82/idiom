@@ -91,8 +91,8 @@ exports.delete = function(req, res) {
 exports.list = function(req, res) {
   // console.log('* user.server.controller - list *');
 
-  var limit = req.query.limit;
-  var offset = req.query.offset;
+  var limit = parseInt(req.query.limit, 10);
+  var offset = parseInt(req.query.offset, 10);
   var search = (req.query.search === undefined) ? '%' : req.query.search;
 
   var query = '%' + search + '%';
