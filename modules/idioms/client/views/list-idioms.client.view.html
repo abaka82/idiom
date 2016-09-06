@@ -76,14 +76,14 @@
         <td style="word-wrap:break-word;width:500px;text-align: left;">
           {{entry.translationLang}}
         </td>
-        <td style="word-wrap:break-word;width:500px;text-align: left;">
-          <img ng-src="{{entry.imageURL}}" ng-show="entry.imageURL" class="img-thumbnail user-profile-picture">
+        <td style="word-wrap:break-word;width:500px;text-align: left;" ng-class="entry.imageURL ? '' : 'yellowcell' ">
+          <div ng-show="entry.imageURL">Yes (<a href="{{entry.imageURL}}" target="_blank">link</a>)</div>
           <div ng-hide="entry.imageURL">No</div>
         </td>
-        <td style="word-wrap:break-word;width:500px;text-align: left;">
+        <td style="word-wrap:break-word;width:500px;text-align: left;" ng-class="entry.derivation ? '' : 'yellowcell' ">
           {{entry.derivation}}
         </td>
-        <td style="word-wrap:break-word;width:500px;text-align: left;">
+        <td style="word-wrap:break-word;width:500px;text-align: left;" ng-class="entry.equivalent_count ? '' : 'yellowcell' ">
           {{entry.equivalent_count}}
         </td>
         <td class="text-right">
