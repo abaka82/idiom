@@ -75,7 +75,8 @@
           <button
             custom-confirmation="remove()"
             custom-message="Are you sure want to remove idiom <strong>{{entry.translation | capitalize: all}}</strong> and all its 121 and equivalent translations?"
-            class="btn btn-danger btn-lg pull-right">
+            class="btn btn-danger btn-lg pull-right"
+            ng-show="vm.idiom.id">
             <i class="fa fa-trash-o"></i>
           </button>
         </div>
