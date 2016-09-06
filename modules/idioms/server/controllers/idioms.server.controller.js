@@ -133,11 +133,12 @@ exports.delete = function(req, res) {
 exports.list = function(req, res) {
   // console.log('* idioms.server.controller - list *');
 
-  db.sequelize.query('SELECT a.*, b.translation, b.language AS translationLang, ' +
+  db.sequelize.query('SELECT DISTINCT a.*, b.translation, b.language AS translationLang, ' +
                      '(SELECT COUNT(*) ' +
                      'FROM Equivalents c ' +
                      'WHERE c.idiomId = a.id) AS equivalent_count ' +
-                     'FROM Idioms a, Translations b WHERE b.idiomId = a.id',
+                     'FROM Idioms a LEFT JOIN Translations b ON b.idiomId = a.id ' +
+                     'GROUP BY a.id',
                     { type: db.sequelize.QueryTypes.SELECT })
   .then(function(idioms) {
     return res.json(idioms);
@@ -164,6 +165,7 @@ exports.read = function(req, res) {
     include: [
       db.User
     ]
+
   })
   .then(function(idiom) {
     return res.json(idiom);

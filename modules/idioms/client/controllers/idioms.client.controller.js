@@ -80,17 +80,25 @@
       }
 
       vm.idiom.language = vm.selectedLang.lang;
+      var operation = '';
 
       // TODO: move create/update logic to service
       if (vm.idiom.id) {
+        operation = 'update';
         vm.idiom.$update(successCallback, errorCallback);
       } else {
+        operation = 'add';
         vm.idiom.$save(successCallback, errorCallback);
       }
 
       function successCallback(res) {
-        console.log('success add idiom with id: '+res.id);
-        toastr.success('New idiom has been added successfully. Please continue to add image, 121 translation, and its equivalent.');
+        if (operation === 'add') {
+          console.log('success add idiom with id: '+res.id);
+          toastr.success('New idiom has been added successfully. Please continue to add image, 121 translation, and its equivalent.');
+        } else {
+          console.log('success update idiom id: '+res.id);
+          toastr.success('Idiom has been updated successfully.');
+        }
       }
 
       function errorCallback(res) {
