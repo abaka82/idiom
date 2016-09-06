@@ -22,7 +22,8 @@
     "font-awesome": "~4.5.0",
     "ng-table": "^0.8.1",
     "angular-toastr": "^1.7.0",
-    "PACE": "pace#^1.0.2"
+    "PACE": "pace#^1.0.2",
+    "ngBootbox": "^0.1.3"
   },
   "resolutions": {
     "angular": "1.3.20"

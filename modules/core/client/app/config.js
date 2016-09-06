@@ -13,7 +13,8 @@ var ApplicationConfiguration = (function() {
     'ui.utils',
     'angularFileUpload',
     'ngTable',
-    'toastr'
+    'toastr',
+    'ngBootbox'
   ];
 
   // Add a new vertical module

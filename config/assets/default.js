@@ -30,7 +30,11 @@ module.exports = {
         'public/lib/ng-table/dist/ng-table.js',
         'public/lib/PACE/pace.js',
         'public/lib/angular-toastr/dist/angular-toastr.js',
-        'public/lib/angular-toastr/dist/angular-toastr.tpls.js'
+        'public/lib/angular-toastr/dist/angular-toastr.tpls.js',
+        'public/lib/jquery/dist/jquery.js',
+        'public/lib/bootstrap/dist/js/bootstrap.js',
+        'public/lib/bootbox/bootbox.js',
+        'public/lib/ngBootbox/dist/ngBootbox.js'
       ],
       tests: ['public/lib/angular-mocks/angular-mocks.js']
     },

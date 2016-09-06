@@ -52,6 +52,62 @@
     vm.selectedTranslationLang = { id: '2', lang: 'EN' };
     vm.selectedEquivalentLang = { id: '2', lang: 'EN' };
 
+    // custom dialog for New Idiom button
+    vm.customDialogButtonsNewIdiom = {
+      save: {
+        label: 'Save',
+        className: 'btn-warning',
+        callback: function() { 
+          console.log('Save action');
+          save(vm.form.idiomForm.$valid);
+          $state.go('idioms.create');
+        }
+      },
+      discard: {
+        label: 'Discard changes',
+        className: 'btn-danger',
+        callback: function() {
+          console.log('Discard changes action');
+          $state.go('idioms.create');
+        }
+      },
+      cancel: {
+        label: 'Cancel',
+        className: 'btn-primary',
+        callback: function() {
+          console.log('Cancel action');
+        }
+      }
+    };
+
+    // custom dialog for Cancel button
+    vm.customDialogButtonsCancel = {
+      save: {
+        label: 'Save',
+        className: 'btn-warning',
+        callback: function() { 
+          console.log('Save action');
+          save(vm.form.idiomForm.$valid);
+          $state.go('home');
+        }
+      },
+      discard: {
+        label: 'Discard changes',
+        className: 'btn-danger',
+        callback: function() {
+          console.log('Discard changes action');
+          $state.go('home');
+        }
+      },
+      cancel: {
+        label: 'Cancel',
+        className: 'btn-primary',
+        callback: function() {
+          console.log('Cancel action');
+        }
+      }
+    };
+
     // Remove existing Idiom
     function remove() {
       vm.idiom.$remove($state.go('idioms.create'));
@@ -60,16 +116,6 @@
 
     $scope.remove = function() {
       remove();
-    };
-
-    // Reload page
-    function newIdiom() {
-      $state.reload();
-      
-    }
-
-    $scope.newIdiom = function() {
-      newIdiom();
     };
 
     // Save Idiom
@@ -150,7 +196,7 @@
 
       // Clear upload buttons
       vm.uploader.clearQueue();
-      toastr.success('Picture has been added successfully.');
+      toastr.success('Idiom picture changed successfully');
     };
 
     // Called after the user has failed to uploaded a new picture
@@ -163,8 +209,8 @@
       toastr.error(response.message, 'There is an error');
     };
 
-    // Change user profile picture
-    vm.uploadProfilePicture = function () {
+    // Change idiom picture
+    vm.uploadPicture = function () {
       // Clear messages
       vm.success = $scope.error = null;
 

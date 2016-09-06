@@ -49,11 +49,8 @@
                 </span>
               </div>
               <div class="text-center form-group" ng-show="vm.uploader.queue.length">
-                <button class="btn btn-primary" ng-click="vm.uploadProfilePicture();">Upload</button>
+                <button class="btn btn-primary" ng-click="vm.uploadPicture();">Upload</button>
                 <button class="btn btn-default" ng-click="vm.cancelUpload();">Cancel</button>
-              </div>
-              <div ng-show="success" class="text-center text-success">
-                <strong>Profile Picture Changed Successfully</strong>
               </div>
             </div>
           </div>
@@ -72,8 +69,54 @@
 
         <div class="form-group">
           <button ng-click="vm.save(vm.form.idiomForm.$valid)" class="btn btn-success btn-lg">{{vm.idiom.id ? 'Update' : 'Create'}}</button>
-          <button class="btn btn-success btn-lg" ng-click="newIdiom()">New Idiom</button>
-          <button ui-sref="home" class="btn btn-success btn-lg">Cancel</button>
+
+          <!-- New Idiom button set. First one if there is no changes, and second one
+               if there is changes -->
+          <button class="btn btn-success btn-lg" ui-sref="idioms.create"
+            ng-show = "vm.form.idiomForm.idiom.$pristine &&
+                       vm.form.idiomForm.meaning.$pristine &&
+                       vm.form.idiomForm.derivation.$pristine &&
+                       vm.form.idiomForm.language.$pristine &&
+                       !vm.success">
+            New Idiom
+          </button>
+          <button class="btn btn-success btn-lg"
+            ng-bootbox-title="Confirmation dialog"
+            ng-bootbox-custom-dialog="There are changes to idiom entry. What action do you want for these changes?"
+            ng-bootbox-buttons="vm.customDialogButtonsNewIdiom"
+            ng-bootbox-class-name="some-class"
+            ng-show = "vm.form.idiomForm.idiom.$dirty ||
+                       vm.form.idiomForm.meaning.$dirty ||
+                       vm.form.idiomForm.derivation.$dirty ||
+                       vm.form.idiomForm.language.$dirty ||
+                       vm.success">
+              New Idiom
+          </button>
+
+
+          <!-- Cancel button set. First one if there is no changes, and second one
+               if there is changes -->
+          <button ui-sref="home" class="btn btn-success btn-lg"
+            ng-show = "vm.form.idiomForm.idiom.$pristine &&
+                       vm.form.idiomForm.meaning.$pristine &&
+                       vm.form.idiomForm.derivation.$pristine &&
+                       vm.form.idiomForm.language.$pristine &&
+                       !vm.success">
+              Cancel
+          </button>
+          <button class="btn btn-success btn-lg"
+            ng-bootbox-title="Confirmation dialog"
+            ng-bootbox-custom-dialog="There are changes to idiom entry. What action do you want for these changes?"
+            ng-bootbox-buttons="vm.customDialogButtonsCancel"
+            ng-bootbox-class-name="some-class"
+            ng-show = "vm.form.idiomForm.idiom.$dirty ||
+                       vm.form.idiomForm.meaning.$dirty ||
+                       vm.form.idiomForm.derivation.$dirty ||
+                       vm.form.idiomForm.language.$dirty ||
+                       vm.success">
+              Cancel
+          </button>
+
 
           <button
             custom-confirmation="remove()"
