@@ -66,16 +66,8 @@ exports.signup = function(req, res) {
 
               user._previousDataValues.password = null;
               user._previousDataValues.salt = null;
-              // Login
-              req.login(user, function(err) {
-                if (err) {
-                  return res.status(400).send(err);
-                } else {
-                  return res.json(user);
-                }
-              });
 
-              return null;
+              return res.json(user);
             })
             .catch(function(err) {
               return res.status(400).send({
