@@ -148,11 +148,8 @@
       // Show success message
       vm.success = true;
 
-      // Populate user object
-      vm.user = Authentication.user = response;
-
       // Clear upload buttons
-      vm.cancelUpload();
+      vm.uploader.clearQueue();
       toastr.success('Picture has been added successfully.');
     };
 
