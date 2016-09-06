@@ -12,13 +12,14 @@
       title: 'Idioms',
       state: 'idioms',
       type: 'dropdown',
-      roles: ['*']
+      roles: ['user', 'admin']
     });
 
     // Add the dropdown list item
     Menus.addSubMenuItem('topbar', 'idioms', {
       title: 'List Idioms',
-      state: 'idioms.list'
+      state: 'idioms.list',
+      roles: ['user', 'admin']
     });
 
     // Add the dropdown create item
