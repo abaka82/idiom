@@ -182,7 +182,12 @@
     // Cancel the upload process
     vm.cancelUpload = function () {
       vm.uploader.clearQueue();
-      vm.imageURL = vm.idiom.imageURL;
+
+      if (!vm.idiom.imageURL) {
+        vm.imageURL = 'modules/idioms/client/img/no-image.png';
+      } else {
+        vm.imageURL = vm.idiom.imageURL;
+      }
     };
 
     // --------End Image functions ------------
