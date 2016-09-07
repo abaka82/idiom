@@ -13,7 +13,8 @@ var ApplicationConfiguration = (function() {
     'ui.utils',
     'angularFileUpload',
     'ngTable',
-    'toastr'
+    'toastr',
+    'ngBootbox'
   ];
 
   // Add a new vertical module
@@ -679,13 +680,14 @@ angular.module('core').service('Socket', ['Authentication', '$state', '$timeout'
       title: 'Idioms',
       state: 'idioms',
       type: 'dropdown',
-      roles: ['*']
+      roles: ['user', 'admin']
     });
 
     // Add the dropdown list item
     Menus.addSubMenuItem('topbar', 'idioms', {
       title: 'List Idioms',
-      state: 'idioms.list'
+      state: 'idioms.list',
+      roles: ['user', 'admin']
     });
 
     // Add the dropdown create item
@@ -856,6 +858,62 @@ angular.module('core').service('Socket', ['Authentication', '$state', '$timeout'
     vm.selectedTranslationLang = { id: '2', lang: 'EN' };
     vm.selectedEquivalentLang = { id: '2', lang: 'EN' };
 
+    // custom dialog for New Idiom button
+    vm.customDialogButtonsNewIdiom = {
+      save: {
+        label: 'Save',
+        className: 'btn-warning',
+        callback: function() { 
+          console.log('Save action');
+          save(vm.form.idiomForm.$valid);
+          $state.go('idioms.create');
+        }
+      },
+      discard: {
+        label: 'Discard changes',
+        className: 'btn-danger',
+        callback: function() {
+          console.log('Discard changes action');
+          $state.go('idioms.create');
+        }
+      },
+      cancel: {
+        label: 'Cancel',
+        className: 'btn-primary',
+        callback: function() {
+          console.log('Cancel action');
+        }
+      }
+    };
+
+    // custom dialog for Cancel button
+    vm.customDialogButtonsCancel = {
+      save: {
+        label: 'Save',
+        className: 'btn-warning',
+        callback: function() { 
+          console.log('Save action');
+          save(vm.form.idiomForm.$valid);
+          $state.go('home');
+        }
+      },
+      discard: {
+        label: 'Discard changes',
+        className: 'btn-danger',
+        callback: function() {
+          console.log('Discard changes action');
+          $state.go('home');
+        }
+      },
+      cancel: {
+        label: 'Cancel',
+        className: 'btn-primary',
+        callback: function() {
+          console.log('Cancel action');
+        }
+      }
+    };
+
     // Remove existing Idiom
     function remove() {
       vm.idiom.$remove($state.go('idioms.create'));
@@ -866,16 +924,6 @@ angular.module('core').service('Socket', ['Authentication', '$state', '$timeout'
       remove();
     };
 
-    // Reload page
-    function newIdiom() {
-      $state.reload();
-      
-    }
-
-    $scope.newIdiom = function() {
-      newIdiom();
-    };
-
     // Save Idiom
     function save(isValid) {
       if (!isValid) {
@@ -884,17 +932,25 @@ angular.module('core').service('Socket', ['Authentication', '$state', '$timeout'
       }
 
       vm.idiom.language = vm.selectedLang.lang;
+      var operation = '';
 
       // TODO: move create/update logic to service
       if (vm.idiom.id) {
+        operation = 'update';
         vm.idiom.$update(successCallback, errorCallback);
       } else {
+        operation = 'add';
         vm.idiom.$save(successCallback, errorCallback);
       }
 
       function successCallback(res) {
-        console.log('success add idiom with id: '+res.id);
-        toastr.success('New idiom has been added successfully. Please continue to add image, 121 translation, and its equivalent.');
+        if (operation === 'add') {
+          console.log('success add idiom with id: '+res.id);
+          toastr.success('New idiom has been added successfully. Please continue to add image, 121 translation, and its equivalent.');
+        } else {
+          console.log('success update idiom id: '+res.id);
+          toastr.success('Idiom has been updated successfully.');
+        }
       }
 
       function errorCallback(res) {
@@ -944,12 +1000,9 @@ angular.module('core').service('Socket', ['Authentication', '$state', '$timeout'
       // Show success message
       vm.success = true;
 
-      // Populate user object
-      vm.user = Authentication.user = response;
-
       // Clear upload buttons
-      vm.cancelUpload();
-      toastr.success('Picture has been added successfully.');
+      vm.uploader.clearQueue();
+      toastr.success('Idiom picture changed successfully');
     };
 
     // Called after the user has failed to uploaded a new picture
@@ -962,8 +1015,8 @@ angular.module('core').service('Socket', ['Authentication', '$state', '$timeout'
       toastr.error(response.message, 'There is an error');
     };
 
-    // Change user profile picture
-    vm.uploadProfilePicture = function () {
+    // Change idiom picture
+    vm.uploadPicture = function () {
       // Clear messages
       vm.success = $scope.error = null;
 
@@ -978,7 +1031,12 @@ angular.module('core').service('Socket', ['Authentication', '$state', '$timeout'
     // Cancel the upload process
     vm.cancelUpload = function () {
       vm.uploader.clearQueue();
-      vm.imageURL = vm.idiom.imageURL;
+
+      if (!vm.idiom.imageURL) {
+        vm.imageURL = 'modules/idioms/client/img/no-image.png';
+      } else {
+        vm.imageURL = vm.idiom.imageURL;
+      }
     };
 
     // --------End Image functions ------------
@@ -1258,6 +1316,11 @@ angular.module('core').service('Socket', ['Authentication', '$state', '$timeout'
 // Configuring the Articles module
 angular.module('users.admin').run(['Menus',
   function (Menus) {
+    Menus.addSubMenuItem('topbar', 'admin', {
+      title: 'Manage Users',
+      state: 'admin.users'
+    });
+
     Menus.addSubMenuItem('topbar', 'admin', {
       title: 'Register New User',
       state: 'authentication.signup'
@@ -1677,8 +1740,8 @@ angular.module('users').controller('UsersController', [
 
 'use strict';
 
-angular.module('users').controller('AuthenticationController', ['$scope', '$state', '$http', '$location', '$window', 'Authentication', 'PasswordValidator',
-  function ($scope, $state, $http, $location, $window, Authentication, PasswordValidator) {
+angular.module('users').controller('AuthenticationController', ['$scope', '$state', '$http', '$location', '$window', 'toastr', 'Authentication', 'PasswordValidator',
+  function ($scope, $state, $http, $location, $window, toastr, Authentication, PasswordValidator) {
     $scope.authentication = Authentication;
     $scope.popoverMsg = PasswordValidator.getPopoverMsg();
 
@@ -1700,11 +1763,12 @@ angular.module('users').controller('AuthenticationController', ['$scope', '$stat
       }
 
       $http.post('/api/auth/signup', $scope.credentials).success(function (response) {
-        // If successful we assign the response to the global user model
-        $scope.authentication.user = response;
+        // If successful, do not assign the response to the global user model
+        //$scope.authentication.user = response;
 
-        // And redirect to the previous or home page
-        $state.go($state.previous.state.name || 'home', $state.previous.params);
+        // And redirect to home page
+        $state.go('home');
+        toastr.success('New user has been created successfully.');
       }).error(function (response) {
         $scope.error = response.message;
       });
