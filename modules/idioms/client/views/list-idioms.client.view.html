@@ -81,7 +81,8 @@
           <div ng-hide="entry.imageURL">No</div>
         </td>
         <td style="word-wrap:break-word;width:500px;text-align: left;" ng-class="entry.derivation ? '' : 'yellowcell' ">
-          {{entry.derivation}}
+          <div ng-show="entry.derivation">Yes</div>
+          <div ng-hide="entry.derivation">No</div>
         </td>
         <td style="word-wrap:break-word;width:500px;text-align: left;" ng-class="entry.equivalent_count ? '' : 'yellowcell' ">
           {{entry.equivalent_count}}
