@@ -52,6 +52,10 @@
           Derivation
           <span class="sortorder" ng-show="vm.predicate === 'derivation'" ng-class="{reverse:vm.reverse}"></span>
         </th>
+        <th ng-click="vm.order('meaning')" style="width:200px;cursor: pointer;">
+          Meaning
+          <span class="sortorder" ng-show="vm.predicate === 'meaning'" ng-class="{reverse:vm.reverse}"></span>
+        </th>
         <th ng-click="vm.order('equivalent_count')" style="width:200px;cursor: pointer;">
           Native Equivalent
           <span class="sortorder" ng-show="vm.predicate === 'equivalent_count'" ng-class="{reverse:vm.reverse}"></span>
@@ -83,6 +87,10 @@
         <td style="word-wrap:break-word;width:500px;text-align: left;" ng-class="entry.derivation ? '' : 'yellowcell' ">
           <div ng-show="entry.derivation">Yes</div>
           <div ng-hide="entry.derivation">No</div>
+        </td>
+        <td style="word-wrap:break-word;width:500px;text-align: left;" ng-class="entry.meaning ? '' : 'yellowcell' ">
+          <div ng-show="entry.meaning">Yes</div>
+          <div ng-hide="entry.meaning">No</div>
         </td>
         <td style="word-wrap:break-word;width:500px;text-align: left;" ng-class="entry.equivalent_count ? '' : 'yellowcell' ">
           {{entry.equivalent_count}}
