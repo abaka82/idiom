@@ -18,7 +18,10 @@
         url: '',
         templateUrl: 'modules/idioms/client/views/list-idioms.client.view.html',
         controller: 'IdiomsListController',
-        controllerAs: 'vm'
+        controllerAs: 'vm',
+        data: {
+          roles: ['user', 'admin']
+        }
       })
       .state('idioms.create', {
         url: '/create',
