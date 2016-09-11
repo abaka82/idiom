@@ -267,6 +267,8 @@
 
         //clear id and prepare for new translation
         vm.translation.id = '';
+        vm.translation.translation = '';
+        vm.selectedTranslationLang = { id: '2', lang: 'EN' };
         vm.translationRequired = false;
 
         // refresh translation list
@@ -331,6 +333,8 @@
 
         //clear id and prepare for new equivalent translation
         vm.equivalent.id = '';
+        vm.equivalent.translation = '';
+        vm.selectedEquivalentLang = { id: '2', lang: 'EN' };
         vm.equivalentRequired = false;
 
         // refresh equivalent translation list
