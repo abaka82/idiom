@@ -133,13 +133,59 @@ exports.delete = function(req, res) {
 exports.list = function(req, res) {
   // console.log('* idioms.server.controller - list *');
 
-  db.sequelize.query('SELECT DISTINCT a.*, b.translation, b.language AS translationLang, ' +
-                     '(SELECT COUNT(*) ' +
-                     'FROM Equivalents c ' +
-                     'WHERE c.idiomId = a.id) AS equivalent_count ' +
-                     'FROM Idioms a LEFT JOIN Translations b ON b.idiomId = a.id ' +
-                     'GROUP BY a.id',
-                    { type: db.sequelize.QueryTypes.SELECT })
+  db.sequelize.query(
+    'SELECT * FROM ' +
+    '(SELECT DISTINCT a.*, b.translation, b.language AS translationLang, ' +
+    '(SELECT COUNT(*) ' +
+    'FROM Equivalents c ' +
+    'WHERE c.idiomId = a.id) AS equivalent_count ' +
+    'FROM Idioms a LEFT JOIN Translations b ON b.idiomId = a.id ' +
+    'WHERE b.language = "EN" ' +
+    'GROUP BY a.id ' +
+    ' ' +
+    'UNION ' +
+    ' ' +
+    'SELECT DISTINCT a.*, b.translation, b.language AS translationLang, ' +
+    '(SELECT COUNT(*) ' +
+    'FROM Equivalents c ' +
+    'WHERE c.idiomId = a.id) AS equivalent_count ' +
+    'FROM Idioms a LEFT JOIN Translations b ON b.idiomId = a.id ' +
+    'WHERE b.language = "DE" ' +
+    'GROUP BY a.id ' +
+    ' ' +
+    'UNION ' +
+    '  ' +
+    'SELECT DISTINCT a.*, b.translation, b.language AS translationLang, ' +
+    '(SELECT COUNT(*) ' +
+    'FROM Equivalents c ' +
+    'WHERE c.idiomId = a.id) AS equivalent_count ' +
+    'FROM Idioms a LEFT JOIN Translations b ON b.idiomId = a.id ' +
+    'WHERE b.language = "ES" ' +
+    'GROUP BY a.id ' +
+    ' ' +
+    'UNION ' +
+    ' ' +
+    'SELECT DISTINCT a.*, b.translation, b.language AS translationLang, ' +
+    '(SELECT COUNT(*) ' +
+    'FROM Equivalents c ' +
+    'WHERE c.idiomId = a.id) AS equivalent_count ' +
+    'FROM Idioms a LEFT JOIN Translations b ON b.idiomId = a.id ' +
+    'WHERE b.language = "IT" ' +
+    'GROUP BY a.id ' +
+    '  ' +
+    'UNION ' +
+    ' ' +
+    'SELECT DISTINCT a.*, b.translation, b.language AS translationLang, ' +
+    '(SELECT COUNT(*) ' +
+    'FROM Equivalents c ' +
+    'WHERE c.idiomId = a.id) AS equivalent_count ' +
+    'FROM Idioms a LEFT JOIN Translations b ON b.idiomId = a.id ' +
+    'GROUP BY a.id ' +
+    ' ' +
+    ') AS tbl ' +
+    ' ' +
+    'GROUP BY tbl.id',
+    { type: db.sequelize.QueryTypes.SELECT })
   .then(function(idioms) {
     return res.json(idioms);
   })
