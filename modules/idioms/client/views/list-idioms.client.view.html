@@ -64,7 +64,7 @@
     </tr>
     </thead>
     <tbody ng-click="setSelected(entry.id)" ng-class="{selected: entry.id === idSelectedVote}" ng-repeat="entry in vm.data | orderBy:vm.predicate:vm.reverse">
-      <tr ng-click="entry.expanded = entry.expanded ? false : true;">
+      <tr>
         <td style="word-wrap:break-word;width:300px;text-align: left;">
           {{entry.id}}
         </td>
@@ -81,7 +81,9 @@
           {{entry.translationLang}}
         </td>
         <td style="word-wrap:break-word;width:500px;text-align: left;" ng-class="entry.imageURL ? '' : 'yellowcell' ">
-          <div ng-show="entry.imageURL">Yes (<a href="{{entry.imageURL}}" target="_blank">link</a>)</div>
+          <div ng-show="entry.imageURL">Yes
+            (<a href="#"><span ng-click="vm.openModal(entry.imageURL)">link</span></a>)
+          </div>
           <div ng-hide="entry.imageURL">No</div>
         </td>
         <td style="word-wrap:break-word;width:500px;text-align: left;" ng-class="entry.derivation ? '' : 'yellowcell' ">

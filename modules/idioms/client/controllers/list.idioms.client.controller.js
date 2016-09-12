@@ -2,7 +2,7 @@
 
   angular
   .module('idioms')
-  .controller('IdiomsListController', function ($scope, $filter, $state, toastr, IdiomsService, NgTableParams) {
+  .controller('IdiomsListController', function ($scope, $filter, $state, $uibModal, toastr, IdiomsService, NgTableParams) {
     var vm = this;
 
     var orderBy = $filter('orderBy');
@@ -50,6 +50,30 @@
       vm.predicate = predicate;
     };
 
+    // open Modal function
+    vm.openModal = function (url) {
+      var modalInstance = $uibModal.open({
+        template: `
+        <div class="modal-header">Idiom picture
+          <a href="#">
+            <span class="glyphicon glyphicon-remove-circle fa-lg pull-right"
+            ng-click="cancel()">
+            </span>
+          </a>
+        </div>
+        <div class="modal-body">
+          <img src="`+url+`" class="idiom-picture">
+        </div>
+        <div class="modal-footer">
+          <button class="btn btn-primary" ng-click="cancel()">Close</button>
+        </div>`,
+        controller: function ($scope, $uibModalInstance) {
+          $scope.cancel = function () {
+            $uibModalInstance.dismiss('cancel');
+          };
+        }
+      });
+    };
 
     vm.listIdiomTable = new NgTableParams({
       page: 1,
