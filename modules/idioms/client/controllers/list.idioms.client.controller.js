@@ -53,21 +53,9 @@
     // open Modal function
     vm.openModal = function (url) {
       var modalInstance = $uibModal.open({
-        template: `
-        <div class="modal-header">Idiom picture
-          <a href="#">
-            <span class="glyphicon glyphicon-remove-circle fa-lg pull-right"
-            ng-click="cancel()">
-            </span>
-          </a>
-        </div>
-        <div class="modal-body">
-          <img src="`+url+`" class="idiom-picture">
-        </div>
-        <div class="modal-footer">
-          <button class="btn btn-primary" ng-click="cancel()">Close</button>
-        </div>`,
+        templateUrl: 'modules/idioms/client/views/idiom-pic.client.view.html',
         controller: function ($scope, $uibModalInstance) {
+          $scope.url = url;
           $scope.cancel = function () {
             $uibModalInstance.dismiss('cancel');
           };

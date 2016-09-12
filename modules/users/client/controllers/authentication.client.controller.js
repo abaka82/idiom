@@ -1,25 +1,25 @@
 'use strict';
 
 var compareTo = function() {
-    return {
-        require: "ngModel",
-        scope: {
-            otherModelValue: "=compareTo"
-        },
-        link: function(scope, element, attributes, ngModel) {
-            ngModel.$validators.compareTo = function(modelValue) {
-                return modelValue === scope.otherModelValue;
-            };
+  return {
+    require: 'ngModel',
+    scope: {
+      otherModelValue: '=compareTo'
+    },
+    link: function(scope, element, attributes, ngModel) {
+      ngModel.$validators.compareTo = function(modelValue) {
+        return modelValue === scope.otherModelValue;
+      };
 
-            scope.$watch("otherModelValue", function() {
-                ngModel.$validate();
-            });
-        }
-    };
+      scope.$watch('otherModelValue', function() {
+        ngModel.$validate();
+      });
+    }
+  };
 };
 
 angular.module('users')
-.directive("compareTo", compareTo) // password confirmation directive
+.directive('compareTo', compareTo) // password confirmation directive
 .controller('AuthenticationController', ['$scope', '$state', '$http', '$location', '$window', 'toastr', 'Authentication', 'PasswordValidator',
   function ($scope, $state, $http, $location, $window, toastr, Authentication, PasswordValidator) {
     $scope.authentication = Authentication;
