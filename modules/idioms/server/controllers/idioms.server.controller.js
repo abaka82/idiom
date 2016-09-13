@@ -57,6 +57,7 @@ exports.changePicture = function(req, res) {
         })
         .then(function(idiom) {
           idiom.imageURL = config.uploads.idiomUpload.dest + req.file.filename;
+          idiom.modifiedBy = req.user.id;
           idiom
             .save()
             .then(function(idiom) {
@@ -245,7 +246,9 @@ exports.update = function(req, res) {
         idiom: req.body.idiom,
         meaning: req.body.meaning,
         derivation: req.body.derivation,
-        language: req.body.language
+        language: req.body.language,
+        approved: req.body.approved,
+        modifiedBy: req.user.id
       })
       .then(function() {
         return res.json(idiom);

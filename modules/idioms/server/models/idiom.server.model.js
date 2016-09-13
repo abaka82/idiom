@@ -18,6 +18,15 @@ module.exports = function(sequelize, DataTypes) {
     imageURL: {
       type: DataTypes.STRING
     },
+    approved: {
+      type: DataTypes.BOOLEAN,
+      allowNull: false,
+      defaultValue: false
+    },
+    modifiedBy: {
+      type: DataTypes.INTEGER(11),
+      allowNull: true
+    }
   }, {
     classMethods: {
       associate: function(models) {
