@@ -35,9 +35,6 @@
     vm.translationRequired = false;
     vm.equivalentRequired = false;
 
-    console.log('getTranslation: '+JSON.stringify(getTranslationResolve));
-    console.log('getEquivalent: '+JSON.stringify(getEquivalentResolve));
-
     vm.translationsByIdiom = getTranslationResolve;
     vm.equivalentsByIdiom = getEquivalentResolve;
 
@@ -51,6 +48,48 @@
     vm.selectedLang = { id: '1', lang: 'DE' };
     vm.selectedTranslationLang = { id: '2', lang: 'EN' };
     vm.selectedEquivalentLang = { id: '2', lang: 'EN' };
+
+    // 
+    vm.savedData = {};
+    vm.savedData.idiom = vm.idiom.idiom;
+    vm.savedData.meaning = vm.idiom.meaning;
+    vm.savedData.derivation = vm.idiom.derivation;
+    vm.savedData.selectedLang = vm.selectedLang.lang;
+
+    vm.isDirty = false;
+
+    vm.checkDirty = function () {
+      vm.isDirty = false;
+
+      if (vm.savedData.idiom !== vm.idiom.idiom) {
+        vm.isDirty = true;
+        return;
+      }
+      if (vm.savedData.meaning !== vm.idiom.meaning) {
+        vm.isDirty = true;
+        return;
+      }
+      if (vm.savedData.derivation !== vm.idiom.derivation) {
+        vm.isDirty = true;
+        return;
+      }
+      if (vm.savedData.selectedLang !== vm.selectedLang.lang) {
+        vm.isDirty = true;
+        return;
+      }
+      if (vm.uploader.queue.length > 0) {
+        vm.isDirty = true;
+        return;
+      }
+      if (vm.translation.translation) {
+        vm.isDirty = true;
+        return;
+      }
+      if (vm.equivalent.equiv_idiom) {
+        vm.isDirty = true;
+        return;
+      }
+    };
 
     // custom dialog for New Idiom button
     vm.customDialogButtonsNewIdiom = {
@@ -68,7 +107,12 @@
         className: 'btn-danger',
         callback: function() {
           console.log('Discard changes action');
-          $state.go('idioms.create');
+          if (!vm.idiom.id) {
+            $state.reload();
+          }
+          else {
+            $state.go('idioms.create');
+          }
         }
       },
       cancel: {
@@ -145,6 +189,12 @@
           console.log('success update idiom id: '+res.id);
           toastr.success('Idiom has been updated successfully.');
         }
+
+        // save state
+        vm.savedData.idiom = vm.idiom.idiom;
+        vm.savedData.meaning = vm.idiom.meaning;
+        vm.savedData.derivation = vm.idiom.derivation;
+        vm.savedData.selectedLang = vm.selectedLang.lang;
       }
 
       function errorCallback(res) {
@@ -186,6 +236,7 @@
             vm.imageURL = fileReaderEvent.target.result;
           }, 0);
         };
+        vm.isDirty = true;
       }
     };
 
@@ -197,6 +248,7 @@
       // Clear upload buttons
       vm.uploader.clearQueue();
       toastr.success('Idiom picture changed successfully');
+      vm.isDirty = false;
     };
 
     // Called after the user has failed to uploaded a new picture
@@ -207,6 +259,7 @@
       // Show error message
       vm.error = response.message;
       toastr.error(response.message, 'There is an error');
+      vm.isDirty = false;
     };
 
     // Change idiom picture
@@ -231,6 +284,8 @@
       } else {
         vm.imageURL = vm.idiom.imageURL;
       }
+
+      vm.isDirty = false;
     };
 
     // --------End Image functions ------------

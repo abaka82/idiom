@@ -9,7 +9,7 @@
           <div class="col-sm-8">
             <div class="form-group" show-errors>
               <label class="control-label" for="idiom">Idiom</label>
-              <input name="idiom" type="text" ng-model="vm.idiom.idiom" id="idiom" class="form-control" placeholder="Enter Idiom ..." required>
+              <input name="idiom" type="text" ng-model="vm.idiom.idiom" id="idiom" class="form-control" placeholder="Enter Idiom ..." ng-Keyup="vm.checkDirty()" required>
               <div ng-messages="vm.form.idiomForm.idiom.$error" role="alert">
                 <p class="help-block error-text" ng-message="required">Idiom is required.</p>
               </div>
@@ -22,7 +22,7 @@
           <div class="col-sm-2 col-sm-offset-1">
             <div class="form-group">
               <label class="control-label" for="language">Language</label>
-              <select name="language" id="language" ng-options="option.lang for option in vm.languages track by option.id" ng-model="vm.selectedLang" class="form-control">
+              <select name="language" id="language" ng-options="option.lang for option in vm.languages track by option.id" ng-model="vm.selectedLang" class="form-control"  ng-change="vm.checkDirty()">
               </select>
             </div>
           </div>
@@ -31,8 +31,8 @@
         <div class="row">
           <div class="col-sm-8">
             <div class="form-group">
-              <label class="control-label" for="derivation">Meaning</label>
-              <textarea name="meaning" data-ng-model="vm.idiom.meaning" id="meaning" class="form-control" cols="20" rows="5" placeholder="Enter meaning here ..."></textarea>
+              <label class="control-label" for="meaning">Meaning</label>
+              <textarea name="meaning" data-ng-model="vm.idiom.meaning" id="meaning" class="form-control" cols="20" rows="5" placeholder="Enter meaning here ..." ng-Keyup="vm.checkDirty()"></textarea>
             </div>
           </div>
 
@@ -60,7 +60,7 @@
           <div class="col-sm-8">
             <div class="form-group">
               <label class="control-label" for="derivation">Derivation</label>
-              <textarea name="derivation" data-ng-model="vm.idiom.derivation" id="derivation" class="form-control" cols="20" rows="5" placeholder="Enter derivation here ..."></textarea>
+              <textarea name="derivation" data-ng-model="vm.idiom.derivation" id="derivation" class="form-control" cols="20" rows="5" placeholder="Enter derivation here ..." ng-Keyup="vm.checkDirty()"></textarea>
             </div>
           </div>
 
@@ -73,11 +73,7 @@
           <!-- New Idiom button set. First one if there is no changes, and second one
                if there is changes -->
           <button class="btn btn-success btn-lg" ui-sref="idioms.create"
-            ng-show = "vm.form.idiomForm.idiom.$pristine &&
-                       vm.form.idiomForm.meaning.$pristine &&
-                       vm.form.idiomForm.derivation.$pristine &&
-                       vm.form.idiomForm.language.$pristine &&
-                       !vm.success">
+            ng-show = "!vm.isDirty">
             New Idiom
           </button>
           <button class="btn btn-success btn-lg"
@@ -85,11 +81,7 @@
             ng-bootbox-custom-dialog="There are changes to idiom entry. What action do you want for these changes?"
             ng-bootbox-buttons="vm.customDialogButtonsNewIdiom"
             ng-bootbox-class-name="some-class"
-            ng-show = "vm.form.idiomForm.idiom.$dirty ||
-                       vm.form.idiomForm.meaning.$dirty ||
-                       vm.form.idiomForm.derivation.$dirty ||
-                       vm.form.idiomForm.language.$dirty ||
-                       vm.success">
+            ng-show = "vm.isDirty">
               New Idiom
           </button>
 
@@ -97,11 +89,7 @@
           <!-- Cancel button set. First one if there is no changes, and second one
                if there is changes -->
           <button ui-sref="home" class="btn btn-success btn-lg"
-            ng-show = "vm.form.idiomForm.idiom.$pristine &&
-                       vm.form.idiomForm.meaning.$pristine &&
-                       vm.form.idiomForm.derivation.$pristine &&
-                       vm.form.idiomForm.language.$pristine &&
-                       !vm.success">
+            ng-show = "!vm.isDirty">
               Cancel
           </button>
           <button class="btn btn-success btn-lg"
@@ -109,11 +97,7 @@
             ng-bootbox-custom-dialog="There are changes to idiom entry. What action do you want for these changes?"
             ng-bootbox-buttons="vm.customDialogButtonsCancel"
             ng-bootbox-class-name="some-class"
-            ng-show = "vm.form.idiomForm.idiom.$dirty ||
-                       vm.form.idiomForm.meaning.$dirty ||
-                       vm.form.idiomForm.derivation.$dirty ||
-                       vm.form.idiomForm.language.$dirty ||
-                       vm.success">
+            ng-show = "vm.isDirty">
               Cancel
           </button>
 
@@ -133,7 +117,7 @@
           <div class="col-sm-8">
             <div class="form-group" show-errors>
               <label class="control-label" for="translation">Add 121 translations:</label>
-              <input name="translation" type="text" ng-model="vm.translation.translation" id="translation" class="form-control" placeholder="Enter 121 translation ..." ng-Keyup="vm.translationRequired = false;vm.errorTranslation = '';">
+              <input name="translation" type="text" ng-model="vm.translation.translation" id="translation" class="form-control" placeholder="Enter 121 translation ..." ng-Keyup="vm.translationRequired = false;vm.errorTranslation = '';vm.checkDirty();">
               <div ng-show="vm.translationRequired" class="text-danger">
                 <strong>121 translation is required.</strong>
               </div>
@@ -192,7 +176,7 @@
           <div class="col-sm-8">
             <div class="form-group" show-errors>
               <label class="control-label" for="equivalent">Add an equivalent Idiom in other language:</label>
-              <input name="equivalent" type="text" ng-model="vm.equivalent.equiv_idiom" id="equivalent" class="form-control" placeholder="Enter equivalent idiom ..." ng-Keyup="vm.equivalentRequired = false;vm.errorEquivalent = '';">
+              <input name="equivalent" type="text" ng-model="vm.equivalent.equiv_idiom" id="equivalent" class="form-control" placeholder="Enter equivalent idiom ..." ng-Keyup="vm.equivalentRequired = false;vm.errorEquivalent = '';vm.checkDirty();">
               <div ng-show="vm.equivalentRequired" class="text-danger">
                 <strong>Equivalent idiom is required.</strong>
               </div>
