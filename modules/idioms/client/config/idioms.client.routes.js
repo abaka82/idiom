@@ -19,6 +19,9 @@
         templateUrl: 'modules/idioms/client/views/list-idioms.client.view.html',
         controller: 'IdiomsListController',
         controllerAs: 'vm',
+        resolve: {
+          getUserResolve: getUser
+        },
         data: {
           roles: ['user', 'admin']
         }
@@ -55,6 +58,12 @@
           roles: ['user', 'admin']
         }
       });
+  }
+
+  getUser.$inject = ['Users'];
+
+  function getUser(Users) {
+    return Users.query().$promise;
   }
 
   getIdiom.$inject = ['$stateParams', 'IdiomsService'];

@@ -2,8 +2,20 @@
 
   angular
   .module('idioms')
-  .controller('IdiomsListController', function ($scope, $filter, $state, $uibModal, toastr, IdiomsService, NgTableParams) {
+  .controller('IdiomsListController', function ($scope, $filter, $state, $uibModal, toastr, getUserResolve, IdiomsService, NgTableParams) {
     var vm = this;
+
+    // get users list
+    vm.users = getUserResolve;
+
+    vm.findUser = function(id) {
+      for (var i = 0; i < vm.users.length; i++) {
+        if (vm.users[i].id === id) {
+          return vm.users[i].displayName;
+        }
+      }
+      return null;
+    };
 
     var orderBy = $filter('orderBy');
     vm.searchKeyword = { idiom: '', language: '' };

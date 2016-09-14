@@ -83,6 +83,23 @@ exports.delete = function(req, res) {
 };
 
 /**
+ * List all Users
+ */
+exports.listAll = function(req, res) {
+  db.User.findAll({
+    attributes: ['id', 'firstName', 'lastName', 'displayName']
+  })
+  .then(function(users) {
+    return res.json(users);
+  })
+  .catch(function(err) {
+    return res.status(400).send({
+      message: errorHandler.getErrorMessage(err)
+    });
+  });
+};
+
+/**
  * List
  * @param  {[type]} req [description]
  * @param  {[type]} res [description]

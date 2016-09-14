@@ -60,6 +60,12 @@
           Native Equivalent
           <span class="sortorder" ng-show="vm.predicate === 'equivalent_count'" ng-class="{reverse:vm.reverse}"></span>
         </th>
+        <th data-sort-ignore="true" style="width:100px;">
+          Created By
+        </th>
+        <th data-sort-ignore="true" style="width:100px;">
+          Modified By
+        </th>
         <th class="text-right" data-sort-ignore="true">Action</th>
     </tr>
     </thead>
@@ -96,6 +102,12 @@
         </td>
         <td style="word-wrap:break-word;width:500px;text-align: left;" ng-class="entry.equivalent_count ? '' : 'yellowcell' ">
           {{entry.equivalent_count}}
+        </td>
+        <td style="word-wrap:break-word;width:100px;text-align: left;">
+          <small><i>{{vm.findUser(entry.userId)}}</i></small>
+        </td>
+        <td style="word-wrap:break-word;width:100px;text-align: left;">
+          <small><i>{{vm.findUser(entry.modifiedBy)}}</i></small>
         </td>
         <td class="text-right">
             <div class="btn-group">
