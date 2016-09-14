@@ -19,6 +19,7 @@ exports.create = function(req, res) {
     meaning: req.body.meaning,
     derivation: req.body.derivation,
     language: req.body.language,
+    approved: req.body.approved,
     userId: req.user.id
   })
   .then(function(newIdiom) {

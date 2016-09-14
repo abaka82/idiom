@@ -63,9 +63,13 @@
               <textarea name="derivation" data-ng-model="vm.idiom.derivation" id="derivation" class="form-control" cols="20" rows="5" placeholder="Enter derivation here ..." ng-Keyup="vm.checkDirty()"></textarea>
             </div>
           </div>
-
-
+          <div class="col-sm-2 pull-right">
+            <input type="checkbox" name="approved" ng-model="vm.idiom.approved" ng-change="vm.checkDirty()">
+            Ready for use
+          </div>
         </div>
+
+
 
         <div class="form-group">
           <button ng-click="vm.save(vm.form.idiomForm.$valid)" class="btn btn-success btn-lg">{{vm.idiom.id ? 'Update' : 'Create'}}</button>

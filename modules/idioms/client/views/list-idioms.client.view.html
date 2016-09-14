@@ -60,6 +60,10 @@
           Native Equivalent
           <span class="sortorder" ng-show="vm.predicate === 'equivalent_count'" ng-class="{reverse:vm.reverse}"></span>
         </th>
+        <th ng-click="vm.order('approved')" style="width:100px;cursor: pointer;">
+          Approved
+          <span class="sortorder" ng-show="vm.predicate === 'approved'" ng-class="{reverse:vm.reverse}"></span>
+        </th>
         <th data-sort-ignore="true" style="width:100px;">
           Created By
         </th>
@@ -102,6 +106,9 @@
         </td>
         <td style="word-wrap:break-word;width:500px;text-align: left;" ng-class="entry.equivalent_count ? '' : 'yellowcell' ">
           {{entry.equivalent_count}}
+        </td>
+        <td style="word-wrap:break-word;width:100px;text-align: center;">
+          <div ng-show="entry.approved"><i class="glyphicon glyphicon-ok"></i></div>
         </td>
         <td style="word-wrap:break-word;width:100px;text-align: left;">
           <small><i>{{vm.findUser(entry.userId)}}</i></small>

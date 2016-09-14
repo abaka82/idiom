@@ -54,6 +54,7 @@
     vm.savedData.idiom = vm.idiom.idiom;
     vm.savedData.meaning = vm.idiom.meaning;
     vm.savedData.derivation = vm.idiom.derivation;
+    vm.savedData.approved = vm.idiom.approved;
     vm.savedData.selectedLang = vm.selectedLang.lang;
 
     vm.isDirty = false;
@@ -70,6 +71,10 @@
         return;
       }
       if (vm.savedData.derivation !== vm.idiom.derivation) {
+        vm.isDirty = true;
+        return;
+      }
+      if (vm.savedData.approved && vm.savedData.approved !== vm.idiom.approved) {
         vm.isDirty = true;
         return;
       }
@@ -194,7 +199,10 @@
         vm.savedData.idiom = vm.idiom.idiom;
         vm.savedData.meaning = vm.idiom.meaning;
         vm.savedData.derivation = vm.idiom.derivation;
+        vm.savedData.approved = vm.idiom.approved;
         vm.savedData.selectedLang = vm.selectedLang.lang;
+
+        vm.isDirty = false;
       }
 
       function errorCallback(res) {
