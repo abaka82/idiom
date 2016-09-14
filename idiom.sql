@@ -48,6 +48,8 @@ CREATE TABLE `Idioms` (
   `meaning` varchar(2048) DEFAULT NULL,
   `derivation` varchar(2048) DEFAULT NULL,
   `imageURL` varchar(255) DEFAULT NULL,
+  `approved` tinyint(1) NOT NULL DEFAULT '0',
+  `modifiedBy` int(11) DEFAULT NULL,
   `createdAt` datetime NOT NULL,
   `updatedAt` datetime NOT NULL,
   `userId` int(11) DEFAULT NULL
