@@ -396,7 +396,7 @@
 
         //clear id and prepare for new equivalent translation
         vm.equivalent.id = '';
-        vm.equivalent.translation = '';
+        vm.equivalent.equiv_idiom = '';
         vm.selectedEquivalentLang = { id: '2', lang: 'EN' };
         vm.equivalentRequired = false;
 
