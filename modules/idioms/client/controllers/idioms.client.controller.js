@@ -96,6 +96,15 @@
       }
     };
 
+    vm.newIdiom = function () {
+      if (vm.idiom.id) {
+        $state.reload();
+      }
+      else {
+         $state.go('idioms.create');
+      }
+    };
+
     // custom dialog for New Idiom button
     vm.customDialogButtonsNewIdiom = {
       save: {

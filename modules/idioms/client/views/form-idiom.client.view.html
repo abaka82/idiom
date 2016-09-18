@@ -76,8 +76,7 @@
 
           <!-- New Idiom button set. First one if there is no changes, and second one
                if there is changes -->
-          <button class="btn btn-success btn-lg" ui-sref="idioms.create"
-            ng-show = "!vm.isDirty">
+          <button class="btn btn-success btn-lg" ng-show = "!vm.isDirty" ng-click="vm.newIdiom()">
             New Idiom
           </button>
           <button class="btn btn-success btn-lg"
