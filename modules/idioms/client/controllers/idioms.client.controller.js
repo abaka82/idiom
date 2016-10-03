@@ -49,6 +49,13 @@
     vm.selectedTranslationLang = { id: '2', lang: 'EN' };
     vm.selectedEquivalentLang = { id: '2', lang: 'EN' };
 
+    if (vm.idiom.id) {
+      if (vm.idiom.language === 'DE') vm.selectedLang = { id: '1', lang: 'DE' };
+      if (vm.idiom.language === 'EN') vm.selectedLang = { id: '2', lang: 'EN' };
+      if (vm.idiom.language === 'ES') vm.selectedLang = { id: '3', lang: 'ES' };
+      if (vm.idiom.language === 'IT') vm.selectedLang = { id: '4', lang: 'IT' };
+    }
+
     // 
     vm.savedData = {};
     vm.savedData.idiom = vm.idiom.idiom;
@@ -101,7 +108,7 @@
         $state.reload();
       }
       else {
-         $state.go('idioms.create');
+        $state.go('idioms.create');
       }
     };
 
