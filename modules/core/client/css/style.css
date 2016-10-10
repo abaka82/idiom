@@ -11,3 +11,6 @@
   height: 100%;
   width: 100%;
 }
+.changed-field {
+  border: 1px solid red;
+}

@@ -9,7 +9,7 @@
           <div class="col-sm-8">
             <div class="form-group" show-errors>
               <label class="control-label" for="idiom">Idiom</label>
-              <input name="idiom" type="text" ng-model="vm.idiom.idiom" id="idiom" class="form-control" placeholder="Enter Idiom ..." ng-Keyup="vm.checkDirty()" required>
+              <input name="idiom" type="text" ng-model="vm.idiom.idiom" id="idiom" class="form-control" placeholder="Enter Idiom ..." ng-Keyup="vm.checkDirty()" ng-class="(vm.isCancelled) && ((vm.savedData.idiom !== vm.idiom.idiom))?'changed-field':''" required>
               <div ng-messages="vm.form.idiomForm.idiom.$error" role="alert">
                 <p class="help-block error-text" ng-message="required">Idiom is required.</p>
               </div>
@@ -22,7 +22,7 @@
           <div class="col-sm-2 col-sm-offset-1">
             <div class="form-group">
               <label class="control-label" for="language">Language</label>
-              <select name="language" id="language" ng-options="option.lang for option in vm.languages track by option.id" ng-model="vm.selectedLang" class="form-control"  ng-change="vm.checkDirty()">
+              <select name="language" id="language" ng-options="option.lang for option in vm.languages track by option.id" ng-model="vm.selectedLang" class="form-control" ng-change="vm.checkDirty()" ng-class="(vm.isCancelled) && ((vm.savedData.selectedLang !== vm.selectedLang.lang))?'changed-field':''">
               </select>
             </div>
           </div>
@@ -32,7 +32,7 @@
           <div class="col-sm-8">
             <div class="form-group">
               <label class="control-label" for="meaning">Meaning</label>
-              <textarea name="meaning" data-ng-model="vm.idiom.meaning" id="meaning" class="form-control" cols="20" rows="5" placeholder="Enter meaning here ..." ng-Keyup="vm.checkDirty()"></textarea>
+              <textarea name="meaning" data-ng-model="vm.idiom.meaning" id="meaning" class="form-control" cols="20" rows="5" placeholder="Enter meaning here ..." ng-Keyup="vm.checkDirty()" ng-class="(vm.isCancelled) && ((vm.savedData.meaning !== vm.idiom.meaning))?'changed-field':''"></textarea>
             </div>
           </div>
 
@@ -60,16 +60,14 @@
           <div class="col-sm-8">
             <div class="form-group">
               <label class="control-label" for="derivation">Derivation</label>
-              <textarea name="derivation" data-ng-model="vm.idiom.derivation" id="derivation" class="form-control" cols="20" rows="5" placeholder="Enter derivation here ..." ng-Keyup="vm.checkDirty()"></textarea>
+              <textarea name="derivation" data-ng-model="vm.idiom.derivation" id="derivation" class="form-control" cols="20" rows="5" placeholder="Enter derivation here ..." ng-Keyup="vm.checkDirty()" ng-class="(vm.isCancelled) && ((vm.savedData.derivation !== vm.idiom.derivation))?'changed-field':''"></textarea>
             </div>
           </div>
-          <div class="col-sm-2 pull-right">
+          <div class="col-sm-2 pull-right" ng-class="(vm.isCancelled) && ((vm.savedData.approved !== vm.idiom.approved))?'changed-field':''">
             <input type="checkbox" name="approved" ng-model="vm.idiom.approved" ng-change="vm.checkDirty()">
             Ready for use
           </div>
         </div>
-
-
 
         <div class="form-group">
           <button ng-click="vm.save(vm.form.idiomForm.$valid)" class="btn btn-success btn-lg">{{vm.idiom.id ? 'Update' : 'Create'}}</button>
@@ -120,7 +118,7 @@
           <div class="col-sm-8">
             <div class="form-group" show-errors>
               <label class="control-label" for="translation">Add 121 translations:</label>
-              <input name="translation" type="text" ng-model="vm.translation.translation" id="translation" class="form-control" placeholder="Enter 121 translation ..." ng-Keyup="vm.translationRequired = false;vm.errorTranslation = '';vm.checkDirty();">
+              <input name="translation" type="text" ng-model="vm.translation.translation" id="translation" class="form-control" placeholder="Enter 121 translation ..." ng-Keyup="vm.translationRequired = false;vm.errorTranslation = '';vm.checkDirty();" ng-class="(vm.isCancelled) && ((vm.savedData.translation !== vm.translation.translation))?'changed-field':''">
               <div ng-show="vm.translationRequired" class="text-danger">
                 <strong>121 translation is required.</strong>
               </div>
@@ -179,7 +177,7 @@
           <div class="col-sm-8">
             <div class="form-group" show-errors>
               <label class="control-label" for="equivalent">Add an equivalent Idiom in other language:</label>
-              <input name="equivalent" type="text" ng-model="vm.equivalent.equiv_idiom" id="equivalent" class="form-control" placeholder="Enter equivalent idiom ..." ng-Keyup="vm.equivalentRequired = false;vm.errorEquivalent = '';vm.checkDirty();">
+              <input name="equivalent" type="text" ng-model="vm.equivalent.equiv_idiom" id="equivalent" class="form-control" placeholder="Enter equivalent idiom ..." ng-Keyup="vm.equivalentRequired = false;vm.errorEquivalent = '';vm.checkDirty();" ng-class="(vm.isCancelled) && ((vm.savedData.equiv_idiom !== vm.equivalent.equiv_idiom))?'changed-field':''">
               <div ng-show="vm.equivalentRequired" class="text-danger">
                 <strong>Equivalent idiom is required.</strong>
               </div>

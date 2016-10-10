@@ -65,6 +65,7 @@
     vm.savedData.selectedLang = vm.selectedLang.lang;
 
     vm.isDirty = false;
+    vm.isCancelled = false;
 
     vm.checkDirty = function () {
       vm.isDirty = false;
@@ -103,6 +104,18 @@
       }
     };
 
+    // check dirty state and prevent go to other menu/page
+    $scope.$on('$stateChangeStart', function (event, toState, toParams, fromState, fromParams) {
+        vm.checkDirty();
+        if (vm.isDirty) {
+            //Show alert and prevent state change
+            event.preventDefault();
+            vm.isCancelled = true;
+            $scope.$apply();
+            toastr.error('There are unsaved changes. Please saved your change or discard by click Cancel button.');
+        };
+      });
+
     vm.newIdiom = function () {
       if (vm.idiom.id) {
         $state.reload();
@@ -112,17 +125,15 @@
       }
     };
 
+    vm.cancelClick = function () {
+      console.log('Cancel action : '+vm.isCancelled);
+          vm.isCancelled = true;
+          console.log('Cancel action : '+vm.isCancelled);
+          $scope.apply();
+    }
+
     // custom dialog for New Idiom button
     vm.customDialogButtonsNewIdiom = {
-      save: {
-        label: 'Save',
-        className: 'btn-warning',
-        callback: function() { 
-          console.log('Save action');
-          save(vm.form.idiomForm.$valid);
-          $state.go('idioms.create');
-        }
-      },
       discard: {
         label: 'Discard changes',
         className: 'btn-danger',
@@ -140,22 +151,14 @@
         label: 'Cancel',
         className: 'btn-primary',
         callback: function() {
-          console.log('Cancel action');
+          vm.isCancelled = true;
+          $scope.$apply();
         }
       }
     };
 
     // custom dialog for Cancel button
     vm.customDialogButtonsCancel = {
-      save: {
-        label: 'Save',
-        className: 'btn-warning',
-        callback: function() { 
-          console.log('Save action');
-          save(vm.form.idiomForm.$valid);
-          $state.go('home');
-        }
-      },
       discard: {
         label: 'Discard changes',
         className: 'btn-danger',
@@ -168,7 +171,8 @@
         label: 'Cancel',
         className: 'btn-primary',
         callback: function() {
-          console.log('Cancel action');
+          vm.isCancelled = true;
+          $scope.$apply();
         }
       }
     };
@@ -219,6 +223,7 @@
         vm.savedData.selectedLang = vm.selectedLang.lang;
 
         vm.isDirty = false;
+        vm.isCancelled = false;
       }
 
       function errorCallback(res) {
@@ -273,6 +278,7 @@
       vm.uploader.clearQueue();
       toastr.success('Idiom picture changed successfully');
       vm.isDirty = false;
+      vm.isCancelled = false;
     };
 
     // Called after the user has failed to uploaded a new picture
@@ -284,6 +290,7 @@
       vm.error = response.message;
       toastr.error(response.message, 'There is an error');
       vm.isDirty = false;
+      vm.isCancelled = false;
     };
 
     // Change idiom picture
@@ -310,6 +317,7 @@
       }
 
       vm.isDirty = false;
+      vm.isCancelled = false;
     };
 
     // --------End Image functions ------------
