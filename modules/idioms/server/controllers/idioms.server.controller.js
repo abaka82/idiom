@@ -226,6 +226,34 @@ exports.read = function(req, res) {
 };
 
 /**
+ * Get Next Idiom
+ */
+exports.getNextIdiom = function(req, res) {
+
+  var idiomId = req.params.idiomId;
+
+  db.Idiom.findOne({
+    where: {
+      id: { $gt: idiomId } 
+    },
+    limit: 1,
+    order: [[
+      'id', 'ASC'
+    ]]
+  })
+  .then(function(idiom) {
+    console.log('idiom: '+JSON.stringify(idiom));
+    return res.json(idiom);
+  })
+  .catch(function(err) {
+    return res.status(400).send({
+      message: errorHandler.getErrorMessage(err)
+    });
+  });
+};
+
+
+/**
  * Update a idiom
  */
 exports.update = function(req, res) {

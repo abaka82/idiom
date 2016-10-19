@@ -3,21 +3,23 @@
 
   angular
     .module('idioms')
-    .controller('IdiomsController', IdiomsController);
+    .controller('IdiomsViewController', IdiomsViewController);
 
-  IdiomsController.$inject = ['$http', '$scope', '$timeout', '$window', '$state',
+  IdiomsViewController.$inject = ['$http', '$scope', '$timeout', '$window', '$state',
                               'idiomResolve', 'newTranslationResolve', 'newEquivalentResolve',
                               'getTranslationResolve', 'getEquivalentResolve',
                               'Authentication', 'FileUploader', 'toastr',
                               'TranslationsService', 'TranslationsByIdiomService',
-                              'EquivalentsService', 'EquivalentsByIdiomService'];
+                              'EquivalentsService', 'EquivalentsByIdiomService',
+                              'NextIdiomService'];
 
-  function IdiomsController($http, $scope, $timeout, $window, $state,
+  function IdiomsViewController($http, $scope, $timeout, $window, $state,
                             idiom, translation, equivalent,
                             getTranslationResolve, getEquivalentResolve,
                             Authentication, FileUploader, toastr,
                             TranslationsService, TranslationsByIdiomService,
-                            EquivalentsService, EquivalentsByIdiomService) {
+                            EquivalentsService, EquivalentsByIdiomService,
+                            NextIdiomService) {
     var vm = this;
 
     vm.idiom = idiom;
@@ -115,6 +117,37 @@
         toastr.error('There are unsaved changes. Please saved your change or discard by click Cancel button.');
       }
     });
+
+    vm.next = function () {
+      NextIdiomService.get({ idiomId: vm.idiom.id }).$promise
+      .then(function (res) {
+        vm.idiom = res;
+        // default image if not supplied
+        if (!vm.idiom.imageURL) {
+          vm.idiom.imageURL = 'modules/idioms/client/img/no-image.png';
+        }
+
+        // get translation
+        TranslationsByIdiomService.query({ idiomId: vm.idiom.id }).$promise
+        .then(function (translation) {
+          vm.translationsByIdiom = translation;
+        }, function(res) {
+          toastr.error('Error when retrieve next translation : '+res.data.message);
+        });
+
+        // get equivalent
+        EquivalentsByIdiomService.query({ idiomId: vm.idiom.id }).$promise
+        .then(function (equiv) {
+          vm.equivalentsByIdiom = equiv;
+        }, function(res) {
+          toastr.error('Error when retrieve next equivalent : '+res.data.message);
+        });
+
+      }, function(res) {
+        toastr.error('Error when retrieve next idiom : '+res.data.message);
+      });
+
+    };
 
     vm.newIdiom = function () {
       if (vm.idiom.id) {

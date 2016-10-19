@@ -23,7 +23,7 @@
           getUserResolve: getUser
         },
         data: {
-          roles: ['user', 'admin']
+          roles: ['guest', 'user', 'admin']
         }
       })
       .state('idioms.create', {
@@ -56,6 +56,22 @@
         },
         data: {
           roles: ['user', 'admin']
+        }
+      })
+      .state('idioms.view', {
+        url: '/:idiomId/view',
+        templateUrl: 'modules/idioms/client/views/view-idiom.client.view.html',
+        controller: 'IdiomsViewController',
+        controllerAs: 'vm',
+        resolve: {
+          idiomResolve: getIdiom,
+          newTranslationResolve: newTranslation,
+          newEquivalentResolve: newEquivalent,
+          getTranslationResolve: getTranslation,
+          getEquivalentResolve: getEquivalent
+        },
+        data: {
+          roles: ['guest', 'user', 'admin']
         }
       });
   }

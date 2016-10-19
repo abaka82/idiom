@@ -1,0 +1,123 @@
+<section>
+  <div class="page-header">
+    <h1>View Idiom</h1>
+  </div>
+  <div class="col-md-12">
+    <form name="vm.form.idiomForm" class="form-horizontal" novalidate>
+      <fieldset>
+        <div class="row">
+          <div class="col-sm-8">
+            <div class="form-group" show-errors>
+              <label class="control-label" for="idiom">Idiom</label>
+              <input name="idiom" type="text" ng-model="vm.idiom.idiom" id="idiom" class="form-control" disabled>
+            </div>
+          </div>
+
+          <div class="col-sm-2 col-sm-offset-1">
+            <div class="form-group">
+              <label class="control-label" for="language">Language</label>
+              <select name="language" id="language" ng-options="option.lang for option in vm.languages track by option.id" ng-model="vm.selectedLang" class="form-control" disabled>
+              </select>
+            </div>
+          </div>
+        </div>
+
+        <div class="row">
+          <div class="col-sm-8">
+            <div class="form-group">
+              <label class="control-label" for="meaning">Meaning</label>
+              <textarea name="meaning" data-ng-model="vm.idiom.meaning" id="meaning" class="form-control" cols="20" rows="5" disabled></textarea>
+            </div>
+          </div>
+
+          <div class="col-sm-2 col-sm-offset-1">
+            <div class="row">
+              <div class="form-group text-center">
+                <img ng-src="{{vm.idiom.imageURL}}" class="img-thumbnail user-profile-picture">
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="row">
+          <div class="col-sm-8">
+            <div class="form-group">
+              <label class="control-label" for="derivation">Derivation</label>
+              <textarea name="derivation" data-ng-model="vm.idiom.derivation" id="derivation" class="form-control" cols="20" rows="5" disabled></textarea>
+            </div>
+          </div>
+          <div class="col-sm-2 pull-right" disabled>
+            <input type="checkbox" name="approved" ng-model="vm.idiom.approved" ng-change="vm.checkDirty()">
+            Ready for use
+          </div>
+        </div>
+
+        <div class="form-group">
+          <button ui-sref="idioms.list()" class="btn btn-success btn-lg">
+            Close
+          </button>
+
+          <button class="btn btn-success btn-lg" ng-click="vm.newIdiom()">
+            < Prev
+          </button>
+
+          <button class="btn btn-success btn-lg" ng-click="vm.next()">
+            Next >
+          </button>
+
+
+          <button ui-sref="idioms.edit({ idiomId: vm.idiom.id })" class="btn btn-success pull-right">
+            <i class="fa fa-pencil-square-o"></i>
+          </button>
+
+        <!-- 121 translation -->
+       <h4>List of 121 translations for the idiom:</h4>
+          <div class="col-sm-1 col-sm-offset-1">
+            <button class="btn btn-success btn-lg" ng-click="vm.saveTranslation(vm.form.idiomForm.$valid)">Show</button>
+          </div>
+
+        <div class="well">
+        <div class="row" ng-show="vm.idiom.id">
+          <table class="table table-striped">
+            <thead>
+              <tr>
+                <th>Language</th>
+                <th>Translation</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr ng-repeat="entry in vm.translationsByIdiom">
+                <td>{{entry.language}}</td>
+                <td>{{entry.translation}}</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+        </div>
+
+        <!-- Equivalent translation -->
+          <h4>List of added equivalents idioms:</h4>
+        <div class="well">
+        <div class="row" ng-show="vm.idiom.id">
+          <table class="table table-striped">
+            <thead>
+              <tr>
+                <th>Language</th>
+                <th>Equivalent idiom</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr ng-repeat="entry in vm.equivalentsByIdiom">
+                <td>{{entry.language}}</td>
+                <td>{{entry.equiv_idiom}}</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+        </div>
+
+
+      </fieldset>
+    </form>
+  </div>
+</section>

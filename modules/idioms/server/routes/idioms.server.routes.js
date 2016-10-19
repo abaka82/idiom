@@ -19,4 +19,8 @@ module.exports = function(app) {
     .delete(idioms.delete);
 
   app.route('/api/idioms/picture').post(idioms.changePicture);
+
+  // get next idiom id
+  app.route('/api/getNextIdiom/:idiomId').all(idiomsPolicy.isAllowed)
+    .get(idioms.getNextIdiom);
 };
