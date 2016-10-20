@@ -31,4 +31,8 @@ module.exports = function(app) {
   // get random idiom id
   app.route('/api/getRandomIdiom/:idiomId').all(idiomsPolicy.isAllowed)
     .get(idioms.getRandomIdiom);
+
+  // get very first idiom id
+  app.route('/api/getFirstIdiom/:idiomId').all(idiomsPolicy.isAllowed)
+    .get(idioms.getFirstIdiom);
 };

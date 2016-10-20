@@ -10,9 +10,13 @@ module.exports = function(sequelize, DataTypes) {
       type: DataTypes.STRING(512),
       allowNull: false,
       defaultValue: '',
-      unique: true
+      unique: 'equiv_and_lang'
     },
-    language: DataTypes.STRING(2),
+    language: {
+      type: DataTypes.STRING(2),
+      allowNull: false,
+      unique: 'equiv_and_lang'
+    }
   }, {
     classMethods: {
       associate: function(models) {

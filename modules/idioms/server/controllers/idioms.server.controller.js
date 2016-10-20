@@ -304,6 +304,30 @@ exports.getRandomIdiom = function(req, res) {
 };
 
 /**
+ * Get First Idiom
+ */
+exports.getFirstIdiom = function(req, res) {
+
+  var idiomId = req.params.idiomId;
+
+  db.Idiom.findOne({
+    limit: 1,
+    order: [[
+      'id', 'ASC'
+    ]]
+  })
+  .then(function(idiom) {
+    console.log('idiom: '+JSON.stringify(idiom));
+    return res.json(idiom);
+  })
+  .catch(function(err) {
+    return res.status(400).send({
+      message: errorHandler.getErrorMessage(err)
+    });
+  });
+};
+
+/**
  * Update a idiom
  */
 exports.update = function(req, res) {

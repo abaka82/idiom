@@ -22,6 +22,11 @@
     vm.translationsByIdiom = getTranslationResolve;
     vm.equivalentsByIdiom = getEquivalentResolve;
 
+    // default image if not supplied
+    if (!vm.idiom.imageURL) {
+      vm.idiom.imageURL = 'modules/idioms/client/img/no-image.png';
+    }
+
     vm.show121 = false;
     vm.showEquiv = false;
     vm.showMeaning = false;
@@ -37,13 +42,13 @@
           vm.idiom = res;
           getTranslation();
           getEquivalent();
-
-          // default image if not supplied
-          if (!vm.idiom.imageURL) {
-            vm.idiom.imageURL = 'modules/idioms/client/img/no-image.png';
-          }
         } else {
           vm.isFirst = true;
+        }
+
+        // default image if not supplied
+        if (!vm.idiom.imageURL) {
+          vm.idiom.imageURL = 'modules/idioms/client/img/no-image.png';
         }
       }, function(res) {
          console.log('res: '+JSON.stringify(res));
@@ -56,18 +61,18 @@
       .then(function (res) {
         vm.isFirst = false;
         vm.isLast = false;
-        console.log('res: '+JSON.stringify(res));
+
         if (res.id) {
           vm.idiom = res;
           getTranslation();
           getEquivalent();
-
-          // default image if not supplied
-          if (!vm.idiom.imageURL) {
-            vm.idiom.imageURL = 'modules/idioms/client/img/no-image.png';
-          }
         } else {
           vm.isLast = true;
+        }
+
+        // default image if not supplied
+        if (!vm.idiom.imageURL) {
+          vm.idiom.imageURL = 'modules/idioms/client/img/no-image.png';
         }
       }, function(res) {
         toastr.error('Error when retrieve next idiom : '+res.data.message);

@@ -29,6 +29,9 @@ exports.invokeRolesPolicies = function() {
     }, {
       resources: '/api/getRandomIdiom/:idiomId',
       permissions: '*'
+    }, {
+      resources: '/api/getFirstIdiom/:idiomId',
+      permissions: '*'
     }]
   }, {
     roles: ['user'],
@@ -47,6 +50,9 @@ exports.invokeRolesPolicies = function() {
     }, {
       resources: '/api/getRandomIdiom/:idiomId',
       permissions: '*'
+    }, {
+      resources: '/api/getFirstIdiom/:idiomId',
+      permissions: '*'
     }]
   }, {
     roles: ['guest'],
@@ -64,6 +70,9 @@ exports.invokeRolesPolicies = function() {
       permissions: ['get']
     }, {
       resources: '/api/getRandomIdiom/:idiomId',
+      permissions: ['get']
+    }, {
+      resources: '/api/getFirstIdiom/:idiomId',
       permissions: ['get']
     }]
   }]);

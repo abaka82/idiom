@@ -25,7 +25,7 @@
     // Add the dropdown view item
     Menus.addSubMenuItem('topbar', 'idioms', {
       title: 'View Idioms',
-      state: 'idioms.viewFirst',
+      state: 'idioms.view',
       roles: ['guest', 'user', 'admin']
     });
 

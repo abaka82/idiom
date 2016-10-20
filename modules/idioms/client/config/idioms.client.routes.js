@@ -73,22 +73,6 @@
         data: {
           roles: ['guest', 'user', 'admin']
         }
-      })
-      .state('idioms.viewFirst', {
-        url: '/1/view',
-        templateUrl: 'modules/idioms/client/views/view-idiom.client.view.html',
-        controller: 'IdiomsViewController',
-        controllerAs: 'vm',
-        resolve: {
-          idiomResolve: getIdiom,
-          newTranslationResolve: newTranslation,
-          newEquivalentResolve: newEquivalent,
-          getTranslationResolve: getTranslation,
-          getEquivalentResolve: getEquivalent
-        },
-        data: {
-          roles: ['guest', 'user', 'admin']
-        }
       });
   }
 
@@ -98,9 +82,12 @@
     return Users.query().$promise;
   }
 
-  getIdiom.$inject = ['$stateParams', 'IdiomsService'];
+  getIdiom.$inject = ['$stateParams', 'IdiomsService', 'FirstIdiomService'];
 
-  function getIdiom($stateParams, IdiomsService) {
+  function getIdiom($stateParams, IdiomsService, FirstIdiomService) {
+    if (!$stateParams.idiomId) {
+      return FirstIdiomService.get({idiomId: 'null'}).$promise;
+    }
     return IdiomsService.get({
       idiomId: $stateParams.idiomId
     }).$promise;
