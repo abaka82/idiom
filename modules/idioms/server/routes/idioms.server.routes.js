@@ -20,7 +20,15 @@ module.exports = function(app) {
 
   app.route('/api/idioms/picture').post(idioms.changePicture);
 
+  // get prev idiom id
+  app.route('/api/getPrevIdiom/:idiomId').all(idiomsPolicy.isAllowed)
+    .get(idioms.getPrevIdiom);
+
   // get next idiom id
   app.route('/api/getNextIdiom/:idiomId').all(idiomsPolicy.isAllowed)
     .get(idioms.getNextIdiom);
+
+  // get random idiom id
+  app.route('/api/getRandomIdiom/:idiomId').all(idiomsPolicy.isAllowed)
+    .get(idioms.getRandomIdiom);
 };

@@ -21,7 +21,13 @@ exports.invokeRolesPolicies = function() {
       resources: '/api/idioms/:idiomId',
       permissions: '*'
     }, {
+      resources: '/api/getPrevIdiom/:idiomId',
+      permissions: '*'
+    }, {
       resources: '/api/getNextIdiom/:idiomId',
+      permissions: '*'
+    }, {
+      resources: '/api/getRandomIdiom/:idiomId',
       permissions: '*'
     }]
   }, {
@@ -33,7 +39,13 @@ exports.invokeRolesPolicies = function() {
       resources: '/api/idioms/:idiomId',
       permissions: '*'
     }, {
+      resources: '/api/getPrevIdiom/:idiomId',
+      permissions: '*'
+    }, {
       resources: '/api/getNextIdiom/:idiomId',
+      permissions: '*'
+    }, {
+      resources: '/api/getRandomIdiom/:idiomId',
       permissions: '*'
     }]
   }, {
@@ -45,7 +57,13 @@ exports.invokeRolesPolicies = function() {
       resources: '/api/idioms/:idiomId',
       permissions: ['get']
     }, {
+      resources: '/api/getPrevIdiom/:idiomId',
+      permissions: ['get']
+    }, {
       resources: '/api/getNextIdiom/:idiomId',
+      permissions: ['get']
+    }, {
+      resources: '/api/getRandomIdiom/:idiomId',
       permissions: ['get']
     }]
   }]);

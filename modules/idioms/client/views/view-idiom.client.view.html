@@ -11,72 +11,97 @@
               <label class="control-label" for="idiom">Idiom</label>
               <input name="idiom" type="text" ng-model="vm.idiom.idiom" id="idiom" class="form-control" disabled>
             </div>
-          </div>
-
-          <div class="col-sm-2 col-sm-offset-1">
             <div class="form-group">
               <label class="control-label" for="language">Language</label>
-              <select name="language" id="language" ng-options="option.lang for option in vm.languages track by option.id" ng-model="vm.selectedLang" class="form-control" disabled>
+              <input name="language" type="text" ng-model="vm.idiom.language" id="language" class="form-control" disabled>
               </select>
             </div>
           </div>
-        </div>
-
-        <div class="row">
-          <div class="col-sm-8">
-            <div class="form-group">
-              <label class="control-label" for="meaning">Meaning</label>
-              <textarea name="meaning" data-ng-model="vm.idiom.meaning" id="meaning" class="form-control" cols="20" rows="5" disabled></textarea>
-            </div>
-          </div>
-
           <div class="col-sm-2 col-sm-offset-1">
+
             <div class="row">
               <div class="form-group text-center">
-                <img ng-src="{{vm.idiom.imageURL}}" class="img-thumbnail user-profile-picture">
+                <a href="#">
+                  <img ng-src="{{vm.idiom.imageURL}}" class="img-thumbnail user-profile-picture" ng-click="vm.openModal(vm.idiom.imageURL)">
+                </a>
               </div>
             </div>
+
           </div>
         </div>
 
         <div class="row">
-          <div class="col-sm-8">
-            <div class="form-group">
-              <label class="control-label" for="derivation">Derivation</label>
-              <textarea name="derivation" data-ng-model="vm.idiom.derivation" id="derivation" class="form-control" cols="20" rows="5" disabled></textarea>
-            </div>
+          <div class="col-sm-3">
+            <button ui-sref="idioms.list()" class="btn btn-success btn-lg">
+              Close
+            </button>
           </div>
-          <div class="col-sm-2 pull-right" disabled>
-            <input type="checkbox" name="approved" ng-model="vm.idiom.approved" ng-change="vm.checkDirty()">
-            Ready for use
+
+          <div class="col-sm-5">
+            <button class="btn btn-success btn-lg" ng-click="vm.prev()" ng-disabled="vm.isFirst === true">
+              < Prev
+            </button>
+            <button class="btn btn-success btn-lg" ng-click="vm.next()" ng-disabled="vm.isLast === true">
+              Next >
+            </button>
+            <button class="btn btn-success btn-lg" ng-click="vm.random()">
+              Random
+            </button>
+           </div>
+
+          <div class="col-sm-2" disabled>
+            <input type="checkbox" name="approved" ng-model="vm.idiom.approved" disabled>
+            Ready
+          </div>
+
+           <div class="col-sm-2">
+             <button ui-sref="idioms.edit({ idiomId: vm.idiom.id })" class="btn btn-success btn-lg pull-right">
+              <i class="fa fa-pencil-square-o"></i>
+             </button>
+           </div>
+        </div>
+
+        <!-- Meaning -->
+        <br>
+        <br>
+        <hr style="height:1px;border:none;color:#333;background-color:#333;"/>
+        <b class="lead">Meaning</b>
+        <span>
+          <button class="btn btn-success btn-sm pull-right" ng-click="vm.showMeaning = !vm.showMeaning"> + / - </button>
+        </span>
+
+        <div class="well" ng-show='vm.showMeaning === true'>
+          <div class="row" ng-show="vm.idiom.id">
+            <textarea name="meaning" data-ng-model="vm.idiom.meaning" id="meaning" style="border:none;" class="form-control" cols="20" rows="5" disabled></textarea>
           </div>
         </div>
 
-        <div class="form-group">
-          <button ui-sref="idioms.list()" class="btn btn-success btn-lg">
-            Close
-          </button>
+        <!-- Derivation -->
+        <br>
+        <br>
+        <hr style="height:1px;border:none;color:#333;background-color:#333;"/>
+        <b class="lead">Derivation</b>
+        <span>
+          <button class="btn btn-success btn-sm pull-right" ng-click="vm.showDerivation = !vm.showDerivation"> + / - </button>
+        </span>
 
-          <button class="btn btn-success btn-lg" ng-click="vm.newIdiom()">
-            < Prev
-          </button>
+        <div class="well" ng-show='vm.showDerivation === true'>
+          <div class="row" ng-show="vm.idiom.id">
+            <textarea name="derivation" data-ng-model="vm.idiom.derivation" id="derivation" style="border:none;" class="form-control" cols="20" rows="5" disabled></textarea>
+          </div>
+        </div>
 
-          <button class="btn btn-success btn-lg" ng-click="vm.next()">
-            Next >
-          </button>
-
-
-          <button ui-sref="idioms.edit({ idiomId: vm.idiom.id })" class="btn btn-success pull-right">
-            <i class="fa fa-pencil-square-o"></i>
-          </button>
 
         <!-- 121 translation -->
-       <h4>List of 121 translations for the idiom:</h4>
-          <div class="col-sm-1 col-sm-offset-1">
-            <button class="btn btn-success btn-lg" ng-click="vm.saveTranslation(vm.form.idiomForm.$valid)">Show</button>
-          </div>
+        <br>
+        <br>
+        <hr style="height:1px;border:none;color:#333;background-color:#333;"/>
+        <b class="lead">121 translations</b>
+        <span>
+          <button class="btn btn-success btn-sm pull-right" ng-click="vm.show121 = !vm.show121"> + / - </button>
+        </span>
 
-        <div class="well">
+        <div class="well" ng-show='vm.show121 === true'>
         <div class="row" ng-show="vm.idiom.id">
           <table class="table table-striped">
             <thead>
@@ -96,8 +121,15 @@
         </div>
 
         <!-- Equivalent translation -->
-          <h4>List of added equivalents idioms:</h4>
-        <div class="well">
+        <br>
+        <br>
+        <hr style="height:1px;border:none;color:#333;background-color:#333;"/>
+        <b class="lead">Native equivalents</b>
+        <span>
+          <button class="btn btn-success btn-sm pull-right" ng-click="vm.showEquiv = !vm.showEquiv"> + / - </button>
+        </span>
+
+        <div class="well" ng-show='vm.showEquiv === true'>
         <div class="row" ng-show="vm.idiom.id">
           <table class="table table-striped">
             <thead>
@@ -115,7 +147,6 @@
           </table>
         </div>
         </div>
-
 
       </fieldset>
     </form>

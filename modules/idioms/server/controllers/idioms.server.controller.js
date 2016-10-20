@@ -7,7 +7,8 @@ var path = require('path'),
   db = require(path.resolve('./config/lib/sequelize')),
   errorHandler = require(path.resolve('./modules/core/server/controllers/errors.server.controller')),
   multer = require('multer'),
-  config = require(path.resolve('./config/config'));
+  config = require(path.resolve('./config/config')),
+  sequelize = require('sequelize');
 
 /**
  * Create a idiom
@@ -226,6 +227,33 @@ exports.read = function(req, res) {
 };
 
 /**
+ * Get Prev Idiom
+ */
+exports.getPrevIdiom = function(req, res) {
+
+  var idiomId = req.params.idiomId;
+
+  db.Idiom.findOne({
+    where: {
+      id: { $lt: idiomId } 
+    },
+    limit: 1,
+    order: [[
+      'id', 'DESC'
+    ]]
+  })
+  .then(function(idiom) {
+    console.log('idiom: '+JSON.stringify(idiom));
+    return res.json(idiom);
+  })
+  .catch(function(err) {
+    return res.status(400).send({
+      message: errorHandler.getErrorMessage(err)
+    });
+  });
+};
+
+/**
  * Get Next Idiom
  */
 exports.getNextIdiom = function(req, res) {
@@ -252,6 +280,28 @@ exports.getNextIdiom = function(req, res) {
   });
 };
 
+/**
+ * Get Random Idiom
+ */
+exports.getRandomIdiom = function(req, res) {
+
+  var idiomId = req.params.idiomId;
+
+  db.Idiom.findOne({
+    order: [[
+      sequelize.fn('RAND'),
+    ]]
+  })
+  .then(function(idiom) {
+    console.log('idiom: '+JSON.stringify(idiom));
+    return res.json(idiom);
+  })
+  .catch(function(err) {
+    return res.status(400).send({
+      message: errorHandler.getErrorMessage(err)
+    });
+  });
+};
 
 /**
  * Update a idiom
