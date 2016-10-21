@@ -73,6 +73,7 @@
         <th class="text-right" data-sort-ignore="true">Action</th>
     </tr>
     </thead>
+    <!--<input ng-model="vm.listIdiomTable.page" ng-model-options="{getterSetter: true}" />-->
     <tbody ng-click="setSelected(entry.id)" ng-class="{selected: entry.id === idSelectedVote}" ng-repeat="entry in vm.data | orderBy:vm.predicate:vm.reverse">
       <tr>
         <td style="word-wrap:break-word;width:300px;text-align: left;">

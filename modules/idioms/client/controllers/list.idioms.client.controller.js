@@ -2,7 +2,7 @@
 
   angular
   .module('idioms')
-  .controller('IdiomsListController', function ($scope, $filter, $state, $uibModal, toastr, getUserResolve, IdiomsService, NgTableParams) {
+  .controller('IdiomsListController', function ($rootScope, $scope, $filter, $state, $uibModal, toastr, getUserResolve, IdiomsService, NgTableParams) {
     var vm = this;
 
     // get users list
@@ -76,7 +76,7 @@
     };
 
     vm.listIdiomTable = new NgTableParams({
-      page: 1,
+      page: (!$rootScope.page) ? 1 : $rootScope.page,
       count: 10,  //items per page
       filter: vm.searchKeyword
     }, {
@@ -93,6 +93,9 @@
             vm.data = vm.idioms.slice((params.page() - 1) * params.count(), params.page() * params.count());
             params.total(vm.idioms.length); 
           }
+
+          // saved page number
+          $rootScope.page = params.page();
 
           // set total for recalc pagination
           $defer.resolve(vm.data);
