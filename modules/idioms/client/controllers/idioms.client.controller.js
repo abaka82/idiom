@@ -421,6 +421,7 @@
         vm.equivalent.equiv_idiom = '';
         vm.selectedEquivalentLang = { id: '2', lang: 'EN' };
         vm.equivalentRequired = false;
+        vm.errorEquivalent = null;
 
         // refresh equivalent translation list
         getEquivalent();

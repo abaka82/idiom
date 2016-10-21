@@ -86,7 +86,7 @@
 
   function getIdiom($stateParams, IdiomsService, FirstIdiomService) {
     if (!$stateParams.idiomId) {
-      return FirstIdiomService.get({idiomId: 'null'}).$promise;
+      return FirstIdiomService.get({ idiomId: 'null' }).$promise;
     }
     return IdiomsService.get({
       idiomId: $stateParams.idiomId

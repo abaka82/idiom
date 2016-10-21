@@ -51,7 +51,6 @@
           vm.idiom.imageURL = 'modules/idioms/client/img/no-image.png';
         }
       }, function(res) {
-         console.log('res: '+JSON.stringify(res));
         toastr.error('Error when retrieve prev idiom : '+res.data.message);
       });
     };
