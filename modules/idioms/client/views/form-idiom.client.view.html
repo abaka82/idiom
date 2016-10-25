@@ -87,11 +87,11 @@
           </button>
 
 
-          <!-- Cancel button set. First one if there is no changes, and second one
+          <!-- Close button set. First one if there is no changes, and second one
                if there is changes -->
           <button ui-sref="idioms.list" class="btn btn-success btn-lg"
             ng-show = "!vm.isDirty">
-              Cancel
+              Close
           </button>
           <button class="btn btn-success btn-lg"
             ng-bootbox-title="Confirmation dialog"
@@ -99,7 +99,7 @@
             ng-bootbox-buttons="vm.customDialogButtonsCancel"
             ng-bootbox-class-name="some-class"
             ng-show = "vm.isDirty">
-              Cancel
+              Close
           </button>
 
 

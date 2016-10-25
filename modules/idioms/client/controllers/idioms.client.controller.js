@@ -113,7 +113,7 @@
         event.preventDefault();
         vm.isCancelled = true;
         $scope.$apply();
-        toastr.error('There are unsaved changes. Please saved your change or discard by click Cancel button.');
+        toastr.error('There are unsaved changes. Please saved your change or discard by click Close button.');
       }
     });
 
@@ -157,7 +157,7 @@
       }
     };
 
-    // custom dialog for Cancel button
+    // custom dialog for Close button
     vm.customDialogButtonsCancel = {
       discard: {
         label: 'Discard changes',
