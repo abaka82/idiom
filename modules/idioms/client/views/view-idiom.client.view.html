@@ -55,7 +55,7 @@
           </div>
 
            <div class="col-sm-2">
-             <button ui-sref="idioms.edit({ idiomId: vm.idiom.id })" class="btn btn-success btn-lg pull-right">
+             <button ng-hide="(vm.authentication.user.roles.indexOf('admin') === -1) && (vm.authentication.user.roles.indexOf('user') === -1)" ui-sref="idioms.edit({ idiomId: vm.idiom.id })" class="btn btn-success btn-lg pull-right">
               <i class="fa fa-pencil-square-o"></i>
              </button>
            </div>

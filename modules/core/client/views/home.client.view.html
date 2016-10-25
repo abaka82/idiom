@@ -9,7 +9,7 @@
     </div>
     <div class="row">
       <p>
-        <a class="btn btn-primary btn-lg" ui-sref="idioms.create">Add New Idiom</a>
+        <a class="btn btn-primary btn-lg" ng-hide="(authentication.user.roles.indexOf('admin') === -1) && (authentication.user.roles.indexOf('user') === -1)" ui-sref="idioms.create">Add New Idiom</a>
         <a class="btn btn-primary btn-lg" ui-sref="idioms.list">Search Idiom DB</a>
         <a class="btn btn-primary btn-lg" ui-sref="idioms.view">View Idiom DB</a>
         <a class="btn btn-primary btn-lg" href="/api/auth/signout" target="_self">Logout</a>

@@ -2,11 +2,14 @@
 
   angular
   .module('idioms')
-  .controller('IdiomsListController', function ($rootScope, $scope, $filter, $state, $uibModal, toastr, getUserResolve, IdiomsService, NgTableParams) {
+  .controller('IdiomsListController', function ($rootScope, $scope, $filter, $state, $uibModal, toastr, getUserResolve, IdiomsService, NgTableParams, Authentication) {
     var vm = this;
 
     // get users list
     vm.users = getUserResolve;
+
+    // This provides Authentication context.
+    $scope.authentication = Authentication;
 
     vm.findUser = function(id) {
       for (var i = 0; i < vm.users.length; i++) {

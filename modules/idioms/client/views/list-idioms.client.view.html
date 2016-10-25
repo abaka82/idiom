@@ -122,7 +122,7 @@
               <table>
               <tr>
                 <td>
-                  <button ui-sref="idioms.edit({ idiomId: entry.id })"
+                  <button ng-hide="(authentication.user.roles.indexOf('admin') === -1) && (authentication.user.roles.indexOf('user') === -1)" ui-sref="idioms.edit({ idiomId: entry.id })"
                     class="btn btn-success pull-right">
                     <i class="fa fa-pencil-square-o"></i>
                   </button>
@@ -136,7 +136,7 @@
                 </td>
                 <td>&nbsp;&nbsp;</td>
                 <td>
-                  <button
+                  <button ng-hide="(authentication.user.roles.indexOf('admin') === -1) && (authentication.user.roles.indexOf('user') === -1)"
                     custom-confirmation="remove(entry.id)"
                     custom-message="Are you sure want to remove idiom <strong>{{entry.translation | capitalize: all}}</strong> and all its 121 and equivalent translations?"
                     class="btn btn-danger pull-right">

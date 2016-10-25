@@ -7,16 +7,19 @@
 
   IdiomsViewController.$inject = ['idiomResolve', 'newTranslationResolve', 'newEquivalentResolve',
                               'getTranslationResolve', 'getEquivalentResolve',
-                              'toastr', '$uibModal',
+                              'toastr', '$uibModal', 'Authentication',
                               'TranslationsByIdiomService', 'EquivalentsByIdiomService',
                               'PrevIdiomService', 'NextIdiomService', 'RandomIdiomService'];
 
   function IdiomsViewController(idiom, translation, equivalent,
                             getTranslationResolve, getEquivalentResolve,
-                            toastr, $uibModal,
+                            toastr, $uibModal, Authentication,
                             TranslationsByIdiomService, EquivalentsByIdiomService,
                             PrevIdiomService, NextIdiomService, RandomIdiomService) {
     var vm = this;
+
+    // This provides Authentication context.
+    vm.authentication = Authentication;
 
     vm.idiom = idiom;
     vm.translationsByIdiom = getTranslationResolve;

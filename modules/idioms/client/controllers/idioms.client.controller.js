@@ -66,6 +66,7 @@
 
     vm.isDirty = false;
     vm.isCancelled = false;
+    vm.isDiscard = false;
 
     vm.checkDirty = function () {
       vm.isDirty = false;
@@ -107,7 +108,7 @@
     // check dirty state and prevent go to other menu/page
     $scope.$on('$stateChangeStart', function (event, toState, toParams, fromState, fromParams) {
       vm.checkDirty();
-      if (vm.isDirty) {
+      if ((vm.isDirty) && (vm.isDiscard === false)) {
         //Show alert and prevent state change
         event.preventDefault();
         vm.isCancelled = true;
@@ -137,6 +138,7 @@
         className: 'btn-danger',
         callback: function() {
           console.log('Discard changes action');
+          vm.isDiscard = true;
           if (!vm.idiom.id) {
             $state.reload();
           }
@@ -162,7 +164,8 @@
         className: 'btn-danger',
         callback: function() {
           console.log('Discard changes action');
-          $state.go('home');
+          vm.isDiscard = true;
+          $state.go('idioms.list');
         }
       },
       cancel: {
@@ -178,6 +181,7 @@
     // Remove existing Idiom
     function remove() {
       vm.idiom.$remove($state.go('idioms.create'));
+      vm.isDiscard = false;
       toastr.success('Idiom has been deleted successfully');
     }
 
@@ -222,6 +226,7 @@
 
         vm.isDirty = false;
         vm.isCancelled = false;
+        vm.isDiscard = false;
       }
 
       function errorCallback(res) {
